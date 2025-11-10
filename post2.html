@@ -436,6 +436,27 @@
                 </p>
             </div>
         </article>
+
+        <div class="comments-section">
+            <h2>Leave a Comment</h2>
+            <p class="comments-intro">Share your thoughts or your own programming journey!</p>
+            
+            <div class="comment-form">
+                <input type="text" id="nameInput" placeholder="Your Name" maxlength="50">
+                <textarea id="commentInput" placeholder="Your comment..." rows="4" maxlength="500"></textarea>
+                <div class="form-footer">
+                    <span class="char-count" id="charCount">0/500</span>
+                    <button id="submitBtn">Post Comment</button>
+                </div>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <h3>Comments (<span id="commentCount">0</span>)</h3>
+                <div id="commentsContainer">
+                    <p class="no-comments">Be the first to comment!</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
