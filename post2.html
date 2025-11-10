@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Journey into Programming - My Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .site-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: #0066cc;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        article {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .post-header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .post-content ul, .post-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+
+        .post-content code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #0066cc;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .related-posts {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .related-posts h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .related-link {
+            display: block;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            color: #0066cc;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .related-link:hover {
+            background: #e9ecef;
+        }
+
+        .comments-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .comments-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .comments-intro {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 3rem;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-count {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .comment-form button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .comment-form button:hover {
+            background: #0052a3;
+        }
+
+        .comment-form button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .comments-list h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .no-comments {
+            color: #888;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0066cc;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .comment-date {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .comment-text {
+            color: #444;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #888;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            article {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .comments-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .comment-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-title">
+                <a href="index.html">My Blog</a>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="back-link">← Back to all posts</a>
+        
+        <article>
+            <div class="post-header">
+                <h1>My Journey into Programming</h1>
+                <div class="meta">November 12, 2025 · 4 min read</div>
+            </div>
+
+            <div class="post-content">
+                <p>
+                    Everyone's path into programming is different. Some people discover it in childhood, others find it later in life. My journey started with curiosity and evolved into a passion that changed my career and my life.
+                </p>
+
+                <h2>The Spark</h2>
+                <p>
+                    It all started when I wanted to build a simple website. I had an idea, but no clue how to bring it to life. So I did what anyone would do - I searched "how to make a website" and fell down the rabbit hole.
+                </p>
+                <p>
+                    That first "Hello World" on a webpage was magical. It was simple, even trivial, but it was <em>mine</em>. I had created something from nothing, just by typing some text into a file. That feeling of creation, of bringing ideas to life through code, hooked me instantly.
+                </p>
+
+                <h2>The Struggle</h2>
+                <p>
+                    Let's be honest - the beginning was tough. I made every mistake possible:
+                </p>
+                <ul>
+                    <li>Forgetting semicolons and spending hours debugging</li>
+                    <li>Not understanding the difference between <code>=</code> and <code>==</code></li>
+                    <li>Copy-pasting code without understanding what it did</li>
+                    <li>Giving up on tutorials halfway through</li>
+                    <li>Feeling like everyone else "got it" faster than me</li>
+                </ul>
+                <p>
+                    There were moments when I wanted to quit. When nothing worked and error messages seemed to be written in a foreign language. When I spent an entire day on a problem only to realize I was missing a closing bracket.
+                </p>
+
+                <blockquote>
+                    "The only way to learn a new programming language is by writing programs in it." - Dennis Ritchie
+                </blockquote>
+
+                <h2>The Breakthrough</h2>
+                <p>
+                    Everything changed when I stopped trying to learn everything at once and started building things. Small things. Imperfect things. Things that barely worked but were <em>mine</em>.
+                </p>
+                <p>
+                    My first real project was a to-do list app. Revolutionary? No. But it taught me more than any tutorial ever could. I learned about:
+                </p>
+                <ul>
+                    <li>DOM manipulation and event handling</li>
+                    <li>Storing data (even just in the browser)</li>
+                    <li>Debugging real problems, not tutorial exercises</li>
+                    <li>The satisfaction of solving your own problems</li>
+                </ul>
+
+                <h2>What I Wish I Knew Then</h2>
+                <p>
+                    Looking back, here's what I would tell my younger self:
+                </p>
+
+                <h3>1. Confusion is Normal</h3>
+                <p>
+                    Everyone feels lost at the beginning. That frustration you feel? It's not a sign you're bad at this - it's a sign you're learning. The difference between beginners and experienced developers isn't that experienced devs don't get confused; it's that they're comfortable being confused.
+                </p>
+
+                <h3>2. Build Things, Don't Just Learn</h3>
+                <p>
+                    Tutorial hell is real. You can watch a hundred videos, but until you build something yourself, you haven't really learned. Start with tiny projects and gradually make them more complex.
+                </p>
+
+                <h3>3. Google is Your Best Friend</h3>
+                <p>
+                    Professional developers Google things constantly. It's not cheating - it's how the job works. Learn to search effectively, read documentation, and adapt solutions to your needs.
+                </p>
+
+                <h3>4. Community Matters</h3>
+                <p>
+                    Join communities, ask questions, share your work. The programming community can be incredibly supportive. Don't be afraid to show your beginner projects - everyone started somewhere.
+                </p>
+
+                <h2>Where I Am Now</h2>
+                <p>
+                    Today, I'm still learning. I probably always will be - that's the nature of programming. But now I'm comfortable with not knowing everything. I know how to figure things out, where to look for help, and most importantly, I know that every expert was once a beginner who didn't give up.
+                </p>
+                <p>
+                    If you're just starting your programming journey, my advice is simple: start small, be patient with yourself, and keep building. The path isn't always linear, but if you keep at it, you'll be amazed at what you can create.
+                </p>
+                <p>
+                    This blog is part of that journey. A place to document what I learn, share what I build, and hopefully help others who are walking the same path.
+                </p>
+
+                <div class="related-posts">
+                    <h3>Related Posts</h3>
+                    <a href="post1.html" class="related-link">
+                        Getting Started with Web Development →
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <div class="comments-section">
+            <h2>Leave a Comment</h2>
+            <p class="comments-intro">Share your thoughts or your own programming journey!</p>
+            
+            <div class="comment-form">
+                <input type="text" id="nameInput" placeholder="Your Name" maxlength="50">
+                <textarea id="commentInput" placeholder="Your comment..." rows="4" maxlength="500"></textarea>
+                <div class="form-footer">
+                    <span class="char-count" id="charCount">0/500</span>
+                    <button id="submitBtn">Post Comment</button>
+                </div>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <h3>Comments (<span id="commentCount">0</span>)</h3>
+                <div id="commentsContainer">
+                    <p class="no-comments">Be the first to comment!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Blog. Built with ❤️ and hosted on GitHub Pages.</p>
+        </div>
+    </footer>
+
+    <script>
+        const nameInput = document.getElementById('nameInput');
+        const commentInput = document.getElementById('commentInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const charCount = document.getElementById('charCount');
+        const commentsContainer = document.getElementById('commentsContainer');
+        const commentCount = document.getElementById('commentCount');
+
+        // Load comments from storage
+        async function loadComments() {
+            try {
+                const result = await window.storage.list('post2-comment:');
+                if (result && result.keys && result.keys.length > 0) {
+                    const comments = [];
+                    for (const key of result.keys) {
+                        const commentData = await window.storage.get(key);
+                        if (commentData) {
+                            comments.push(JSON.parse(commentData.value));
+                        }
+                    }
+                    
+                    // Sort by timestamp (newest first)
+                    comments.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    displayComments(comments);
+                } else {
+                    commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+                    commentCount.textContent = '0';
+                }
+            } catch (error) {
+                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+                commentCount.textContent = '0';
+            }
+        }
+
+        // Display comments
+        function displayComments(comments) {
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+                commentCount.textContent = '0';
+                return;
+            }
+
+            commentCount.textContent = comments.length;
+            commentsContainer.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author">${escapeHtml(comment.name)}</span>
+                        <span class="comment-date">${formatDate(comment.timestamp)}</span>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Character counter
+        commentInput.addEventListener('input', () => {
+            const length = commentInput.value.length;
+            charCount.textContent = `${length}/500`;
+        });
+
+        // Submit comment
+        submitBtn.addEventListener('click', async () => {
+            const name = nameInput.value.trim();
+            const text = commentInput.value.trim();
+
+            if (!name || !text) {
+                alert('Please fill in both your name and comment!');
+                return;
+            }
+
+            if (text.length > 500) {
+                alert('Comment is too long! Maximum 500 characters.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Posting...';
+
+            try {
+                const comment = {
+                    name: name,
+                    text: text,
+                    timestamp: Date.now()
+                };
+
+                const commentId = `post2-comment:${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                await window.storage.set(commentId, JSON.stringify(comment), true);
+
+                // Clear form
+                nameInput.value = '';
+                commentInput.value = '';
+                charCount.textContent = '0/500';
+
+                // Reload comments
+                await loadComments();
+
+                alert('Comment posted successfully!');
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                alert('Failed to post comment. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Post Comment';
+            }
+        });
+
+        // Helper functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Load comments on page load
+        loadComments();
+    </script>
+</body>
+</html>
