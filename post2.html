@@ -525,7 +525,7 @@
         });
 
         // Submit comment
-        submitBtn.addEventListener('click', async () => {
+        submitBtn.addEventListener('click', function() {
             const name = nameInput.value.trim();
             const text = commentInput.value.trim();
 
@@ -542,32 +542,41 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Posting...';
 
-            try {
-                const comment = {
-                    name: name,
-                    text: text,
-                    timestamp: Date.now()
-                };
+            setTimeout(function() {
+                try {
+                    const comment = {
+                        name: name,
+                        text: text,
+                        timestamp: Date.now()
+                    };
 
-                const commentId = `post2-comment:${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                await window.storage.set(commentId, JSON.stringify(comment), true);
+                    // Get existing comments
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    const comments = stored ? JSON.parse(stored) : [];
+                    
+                    // Add new comment
+                    comments.push(comment);
+                    
+                    // Save back to localStorage
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
 
-                // Clear form
-                nameInput.value = '';
-                commentInput.value = '';
-                charCount.textContent = '0/500';
+                    // Clear form
+                    nameInput.value = '';
+                    commentInput.value = '';
+                    charCount.textContent = '0/500';
 
-                // Reload comments
-                await loadComments();
+                    // Reload comments
+                    loadComments();
 
-                alert('Comment posted successfully!');
-            } catch (error) {
-                console.error('Error posting comment:', error);
-                alert('Failed to post comment. Please try again.');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Post Comment';
-            }
+                    alert('Comment posted successfully!');
+                } catch (error) {
+                    console.error('Error posting comment:', error);
+                    alert('Failed to post comment. Please try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Post Comment';
+                }
+            }, 100);
         });
 
         // Helper functions
