@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - My Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .site-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: #0066cc;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        nav a.active {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .intro {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-methods {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .contact-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .contact-card p {
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-card a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: #0066cc;
+            color: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,102,204,0.15);
+        }
+
+        .icon {
+            font-size: 1.2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #888;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+            }
+
+            .social-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-title">
+                <a href="index.html">My Blog</a>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html" class="active">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content">
+            <h1>Get in Touch</h1>
+            <p class="intro">
+                I'd love to hear from you! Whether you have a question, want to collaborate, or just want to say hi, feel free to reach out through any of the channels below.
+            </p>
+
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <h3>📧 Email</h3>
+                    <p>For general inquiries, questions, or collaboration opportunities</p>
+                    <a href="mailto:your.email@example.com">your.email@example.com</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>💼 LinkedIn</h3>
+                    <p>Let's connect professionally and expand our networks</p>
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🐙 GitHub</h3>
+                    <p>Check out my projects and contributions</p>
+                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                </div>
+
+                <div class="contact-card">
+                    <h3>🐦 Twitter</h3>
+                    <p>Follow for quick updates and tech discussions</p>
+                    <a href="https://twitter.com/yourhandle" target="_blank">@yourhandle</a>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 1rem; color: #1a1a1a;">Quick Links</h2>
+            <div class="social-links">
+                <a href="mailto:your.email@example.com" class="social-link">
+                    <span class="icon">📧</span>
+                    <span>Email Me</span>
+                </a>
+                <a href="https://github.com/yourusername" target="_blank" class="social-link">
+                    <span class="icon">💻</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank" class="social-link">
+                    <span class="icon">💼</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://twitter.com/yourhandle" target="_blank" class="social-link">
+                    <span class="icon">🐦</span>
+                    <span>Twitter</span>
+                </a>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
+                <h2 style="margin-bottom: 1rem; color: #1a1a1a;">Response Time</h2>
+                <p style="color: #666;">
+                    I typically respond to emails within 24-48 hours on weekdays. If you don't hear back from me, feel free to send a follow-up message!
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Blog. Built with ❤️ and hosted on GitHub Pages.</p>
+        </div>
+    </footer>
+</body>
+</html>
