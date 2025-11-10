@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journey into Programming - My Blog</title>
+    <title>Deriving the Existence of God through Pure Mathematical Reasoning - My Blog</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,7 +15,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
+            line-height: 1.8;
             color: #333;
             background: #f5f5f5;
         }
@@ -26,7 +28,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem;
         }
@@ -69,67 +71,45 @@
         }
 
         .post-header {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
             color: #1a1a1a;
-            line-height: 1.2;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
         }
 
         .meta {
             color: #888;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
         }
 
-        .post-content h2 {
-            font-size: 1.8rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .post-content h3 {
-            font-size: 1.4rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #1a1a1a;
-        }
-
-        .post-content p {
-            margin-bottom: 1.5rem;
-            color: #444;
-            font-size: 1.1rem;
-        }
-
-        .post-content ul, .post-content ol {
-            margin-bottom: 1.5rem;
-            padding-left: 2rem;
-        }
-
-        .post-content li {
-            margin-bottom: 0.5rem;
-            color: #444;
-        }
-
-        .post-content code {
-            background: #f5f5f5;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        .post-content blockquote {
+        .epigraph {
+            font-style: italic;
+            color: #555;
             border-left: 4px solid #0066cc;
             padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            color: #666;
-            font-style: italic;
+            margin: 2rem 0;
+            font-size: 1.05rem;
+        }
+
+        .epigraph-author {
+            margin-top: 0.5rem;
+            text-align: right;
+            font-size: 0.95rem;
         }
 
         .back-link {
@@ -144,156 +124,100 @@
             text-decoration: underline;
         }
 
-        .related-posts {
+        .post-content h2 {
+            font-size: 1.8rem;
             margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px solid #e0e0e0;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .related-posts h3 {
-            font-size: 1.5rem;
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
             color: #1a1a1a;
         }
 
-        .related-link {
-            display: block;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            color: #0066cc;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .related-link:hover {
-            background: #e9ecef;
-        }
-
-        .comments-section {
-            background: white;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 3rem;
-        }
-
-        .comments-section h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .comments-intro {
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .comment-form {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 3rem;
-        }
-
-        .comment-form input,
-        .comment-form textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .comment-form input:focus,
-        .comment-form textarea:focus {
-            outline: none;
-            border-color: #0066cc;
-        }
-
-        .comment-form textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .char-count {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .comment-form button {
-            background: #0066cc;
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .comment-form button:hover {
-            background: #0052a3;
-        }
-
-        .comment-form button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .comments-list h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .no-comments {
-            color: #888;
-            font-style: italic;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .comment {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 3px solid #0066cc;
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .post-content h4 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
             margin-bottom: 0.75rem;
+            color: #333;
+            font-weight: 600;
         }
 
-        .comment-author {
+        .post-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        .post-content ul, .post-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.75rem;
+            color: #444;
+        }
+
+        .post-content em {
+            font-style: italic;
+        }
+
+        .post-content strong {
             font-weight: 600;
             color: #1a1a1a;
         }
 
-        .comment-date {
-            color: #888;
-            font-size: 0.85rem;
+        .proposition {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
         }
 
-        .comment-text {
-            color: #444;
-            line-height: 1.6;
-            word-wrap: break-word;
+        .theorem {
+            background: #fff8e1;
+            border-left: 4px solid #ffa726;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        .axiom-box {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .definition-box {
+            background: #e3f2fd;
+            border: 2px solid #42a5f5;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .deduction-box {
+            background: #fce4ec;
+            border: 2px solid #ec407a;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .box-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
         }
 
         footer {
@@ -305,7 +229,11 @@
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
             }
 
             article {
@@ -318,14 +246,6 @@
 
             .post-content h2 {
                 font-size: 1.5rem;
-            }
-
-            .comments-section {
-                padding: 2rem 1.5rem;
-            }
-
-            .comment-form {
-                padding: 1.5rem;
             }
         }
     </style>
@@ -349,265 +269,179 @@
         
         <article>
             <div class="post-header">
-                <h1>My Journey into Programming</h1>
-                <div class="meta">November 12, 2025 · 4 min read</div>
+                <h1>Deriving the Existence of God through Pure Mathematical Reasoning</h1>
+                <div class="subtitle">A Logical Response to My Personal Belief</div>
+                <div class="meta">Pilote Muhoza · February 2025</div>
             </div>
 
             <div class="post-content">
-                <p>
-                    Everyone's path into programming is different. Some people discover it in childhood, others find it later in life. My journey started with curiosity and evolved into a passion that changed my career and my life.
-                </p>
-
-                <h2>The Spark</h2>
-                <p>
-                    It all started when I wanted to build a simple website. I had an idea, but no clue how to bring it to life. So I did what anyone would do - I searched "how to make a website" and fell down the rabbit hole.
-                </p>
-                <p>
-                    That first "Hello World" on a webpage was magical. It was simple, even trivial, but it was <em>mine</em>. I had created something from nothing, just by typing some text into a file. That feeling of creation, of bringing ideas to life through code, hooked me instantly.
-                </p>
-
-                <h2>The Struggle</h2>
-                <p>
-                    Let's be honest - the beginning was tough. I made every mistake possible:
-                </p>
-                <ul>
-                    <li>Forgetting semicolons and spending hours debugging</li>
-                    <li>Not understanding the difference between <code>=</code> and <code>==</code></li>
-                    <li>Copy-pasting code without understanding what it did</li>
-                    <li>Giving up on tutorials halfway through</li>
-                    <li>Feeling like everyone else "got it" faster than me</li>
-                </ul>
-                <p>
-                    There were moments when I wanted to quit. When nothing worked and error messages seemed to be written in a foreign language. When I spent an entire day on a problem only to realize I was missing a closing bracket.
-                </p>
-
-                <blockquote>
-                    "The only way to learn a new programming language is by writing programs in it." - Dennis Ritchie
-                </blockquote>
-
-                <h2>The Breakthrough</h2>
-                <p>
-                    Everything changed when I stopped trying to learn everything at once and started building things. Small things. Imperfect things. Things that barely worked but were <em>mine</em>.
-                </p>
-                <p>
-                    My first real project was a to-do list app. Revolutionary? No. But it taught me more than any tutorial ever could. I learned about:
-                </p>
-                <ul>
-                    <li>DOM manipulation and event handling</li>
-                    <li>Storing data (even just in the browser)</li>
-                    <li>Debugging real problems, not tutorial exercises</li>
-                    <li>The satisfaction of solving your own problems</li>
-                </ul>
-
-                <h2>What I Wish I Knew Then</h2>
-                <p>
-                    Looking back, here's what I would tell my younger self:
-                </p>
-
-                <h3>1. Confusion is Normal</h3>
-                <p>
-                    Everyone feels lost at the beginning. That frustration you feel? It's not a sign you're bad at this - it's a sign you're learning. The difference between beginners and experienced developers isn't that experienced devs don't get confused; it's that they're comfortable being confused.
-                </p>
-
-                <h3>2. Build Things, Don't Just Learn</h3>
-                <p>
-                    Tutorial hell is real. You can watch a hundred videos, but until you build something yourself, you haven't really learned. Start with tiny projects and gradually make them more complex.
-                </p>
-
-                <h3>3. Google is Your Best Friend</h3>
-                <p>
-                    Professional developers Google things constantly. It's not cheating - it's how the job works. Learn to search effectively, read documentation, and adapt solutions to your needs.
-                </p>
-
-                <h3>4. Community Matters</h3>
-                <p>
-                    Join communities, ask questions, share your work. The programming community can be incredibly supportive. Don't be afraid to show your beginner projects - everyone started somewhere.
-                </p>
-
-                <h2>Where I Am Now</h2>
-                <p>
-                    Today, I'm still learning. I probably always will be - that's the nature of programming. But now I'm comfortable with not knowing everything. I know how to figure things out, where to look for help, and most importantly, I know that every expert was once a beginner who didn't give up.
-                </p>
-                <p>
-                    If you're just starting your programming journey, my advice is simple: start small, be patient with yourself, and keep building. The path isn't always linear, but if you keep at it, you'll be amazed at what you can create.
-                </p>
-                <p>
-                    This blog is part of that journey. A place to document what I learn, share what I build, and hopefully help others who are walking the same path.
-                </p>
-
-                <div class="related-posts">
-                    <h3>Related Posts</h3>
-                    <a href="post1.html" class="related-link">
-                        Getting Started with Web Development →
-                    </a>
+                <div class="epigraph">
+                    "My opinion concerning God differs widely from that which is ordinarily defended by modern Christians. For I hold that God is of all things the cause immanent, as the phrase is, not transient."
+                    <div class="epigraph-author">— Baruch Spinoza</div>
                 </div>
+
+                <h2>Introduction</h2>
+                <p>
+                    I have wanted to start this project for a very long time. Over the years, I have often met people curious about my views on the existence of God; sometimes to compare their beliefs with mine, and sometimes to persuade me that their faith is the truest among other metaphysical stories. Whether now is the right time to be writing this, I don't know. I still have some doubts, as you will see below but I have now decided to clarify my own position through a series of logical axioms that will lay out, with precision, where I stand on this question. These axioms are rooted in mathematical reasoning that I have refined over many years, through discussions with others, reading diverse perspectives, and adopting new insights as well as thinking for myself. Still, the purpose of this essay is to reach the general reader, so I will avoid the use of formal mathematical notation.
+                </p>
+
+                <p>
+                    Looking at the distribution of religions, geographically, the presence of a mathematical pattern is obvious. It is not random that a child born in Saudi Arabia will grow up Muslim or a child born in Burundi (where >60% of the population are Christians) will almost certainly grow up Christian. Obviously, the pattern is that for the most people the surroundings have a strong influence in the religion you find "truer" than others. My reasoning aims to move beyond that dogma, to show that my beliefs are not bound by it. I weigh all the religions on the same logical scale, because we are all playing tennis with the net down, everything is in. No one knows the right path, and know one knows even if there is a right path. Every religion presents a vision of metaphysics: whether it be an external God residing in a hypothetical space, "heaven," or the reverence of Nature itself.
+                </p>
+
+                <h2>Why Mathematics?</h2>
+                <p>
+                    The purpose is to provide my point on where I stand on the issue of the existence of God. Everyone in their life time have more than once asked themselves the questions: <strong>does God exist?, if so, who created him? which bible is right? Who is right between Christians, Jews, Muslims, Zoroastrians, etc?</strong>
+                </p>
+
+                <p>
+                    Having lived twenty-plus years on this planet, I have seen many changes. People evolve, sacred texts are reinterpreted, and religious practices modernise. Kings, dictators, and ordinary people alike come and go. Kings, dictators and ordinary people die. In fact, all matter particles contained in the universe are in constant flux or ever-increasing entropy (<em>second law of thermodynamics</em>). I have only come across one thing and one thing alone that has not changed, and that is mathematics.
+                </p>
+
+                <p>
+                    Since Archimedes formulated his principle in 246 BCE, it has endured as a cornerstone of science and engineering. Mathematics transcends time, space, and even the limits of our perception. It applies as much to the far reaches of the cosmos as to our everyday lives. In fact, some branches of mathematics extend beyond our intuitive grasp, into dimensions greater than four. Mathematics provides humanity with its most precise representation of reality—enabling us not only to describe nature but to predict its future with astonishing accuracy. Calculus, for example, allows us to model and predict the motion of planets in our solar system with great precision.
+                </p>
+
+                <p>
+                    To me and many more who understand the magnitude of this power, mathematics is regarded as the highest truth in the universe, a powerful tool capable of guiding us to transcendent understanding. I am a Mathematical platonist who views the idea that mathematical entities exist in a timeless, abstract, and objective reality, independent of human thought and the physical world. According to this perspective, numbers, geometric shapes, and mathematical truths are not human inventions but are discovered through reason and intellectual insight and, thus, are pure. Therefore, it is only logical to test such profound questions through the highest truth known to humanity.
+                </p>
+
+                <p>
+                    This is not to claim that this is the only valid approach. Consider, for example, Kierkegaard, who held that faith alone suffices to bridge the gap between the finite and the infinite. For him, the "leap of faith" was the ultimate expression of belief, requiring no proof; only commitment and acceptance of the consequences. Or Descartes, who argued from the innate idea of a supremely powerful and knowledgeable being to the conclusion that God necessarily exists.
+                </p>
+
+                <p>
+                    Both of these ideas are highly appealing, but they do not satisfy my intuition that I need to explore a different approach of my own. I recognise that the world we live in is in constant flux and that our experience of it is limited by our sensory perception. To put this in an example understandable to everyone, we see only a small portion of light, which we call visible light; nonetheless, there are other forms of light with longer wavelengths (e.g. radio waves, infrared) and short wavelengths (e.g. x-ray, gamma ray etc). Though these forms of light are not accessible by our senses through sight, touch, taste, smell, or hearing, they exist, and we use them every day when we use our cellphones, warm a cookie in the microwave or get an X-ray scan at the doctor's office. These lights outside our senses were never discovered until 1865, when James Clerk Maxwell combined electric and magnetic fields into six beautiful equations that unify the fields into one electromagnetic field. The limitations of sensory perception themselves are embedded in the world we live in, which is imperfect.
+                </p>
+
+                <p>
+                    When we ask a metaphysical question, such as the existence of God or why people act illogically <em>(I had to say this, I have encountered many)</em>, we are trying to ask a question for which an answer to the question is in the world outside our access. We are thrown into this imperfect world with nothing to start with but logic and rationality. We are all blind here. No one knows if there is a right path. Therefore, mathematics shows promises of constancy in the changing universe, and it is a means of accessing the world of form otherwise inaccessible to us. Finally I will admit that mathematics has shown some flaws on the limitation of what can be proven by mathematical logic. These flaw were pointed out by Kurt Gödel in his incompleteness theorems.
+                </p>
+
+                <h2>Infinite God</h2>
+                <p>
+                    Normally when we think about infinity mathematically, we have only an idea (not a physical representation) of infinity. To grasp the idea of infinity, I will use set theory here. When we say a set of all book, we mean an idea of a set containing all books ever created and will be created. A set of all real numbers, \(\mathbb{R}\), contain infinite elements of real number \(\mathbb{R}= \{-\infty \cdots, -1, 0, 1, \sqrt{2}, \pi \cdots +\infty\}\). A set of natural numbers contains all natural numbers known as well as unknown to us \(\mathbb{N}= \{1, 2, 3, \cdots +\infty\}\). Individual objects contained in a set are called elements.
+                </p>
+
+                <p>
+                    We aim to reason about the nature of God through a deductive framework based on clearly stated axioms and definitions.
+                </p>
+
+                <div class="axiom-box">
+                    <div class="box-title">Axioms</div>
+                    <ol>
+                        <li>God is infinite: God contains all entities and properties in existence.</li>
+                        <li>God embodies absolute goodness <em>(To be developed in Part B)</em></li>
+                        <li>God is logically consistent: no contradictions exist in God's nature.</li>
+                    </ol>
+                </div>
+
+                <div class="definition-box">
+                    <div class="box-title">Definitions</div>
+                    <ol>
+                        <li>Let \(U\) be the universal set of all entities, including matter, energy, space, time, and abstract concepts.</li>
+                        <li>God's infinitude implies \(G = U\), where \(G\) represents God.</li>
+                        <li><strong>Omnipresence:</strong> God exists in every element of \(U\).</li>
+                        <li><strong>Omniscience:</strong> God knows all elements of \(U\) and all true propositions about \(U\).</li>
+                        <li><strong>Omnipotence:</strong> God has the power to act on or influence any element of \(U\).</li>
+                    </ol>
+                </div>
+
+                <div class="deduction-box">
+                    <div class="box-title">Deduction</div>
+                    <ol>
+                        <li>From Axiom 1 and the definition of infinitude: \(G = U\). Therefore, every entity \(x \in U\) (\(x\) belongs to \(U\)) is also \(x \in G\). By definition, God is omnipresent.</li>
+                        <li>Since \(G = U\) and God contains all entities and properties, God's knowledge includes all true propositions about all elements of \(U\). By definition, God is omniscient.</li>
+                        <li>Because \(G = U\) and God has the ability to act upon all elements of \(U\), God is omnipotent.</li>
+                        <li>Therefore, from the axioms and definitions, God is necessarily omnipresent, omniscient, and omnipotent.</li>
+                    </ol>
+                </div>
+
+                <div class="theorem">
+                    <div class="box-title">Consequences for Humanity</div>
+                    <ol>
+                        <li>Every human, as an element of \(U\), is part of the infinite entity \(G\).</li>
+                        <li>Therefore, all humans are equally encompassed within God. Social status, ethnicity, or personal attributes do not affect this inclusion.</li>
+                        <li>Ethical principle: since all humans are equally part of \(G\), they deserve equal respect and consideration.</li>
+                    </ol>
+                </div>
+
+                <p>
+                    Simply put, God as an infinite substance exists in all directions—by "direction," I mean in every possible manner, substance, and category of being. It would be contradictory to conceive of God as anything less than all things at once, across all space and time. This means God is everything you perceive, everywhere (throughout the universe), and at every moment (past, present, and future).
+                </p>
+
+                <h2>The Problem with Separation</h2>
+                <p>
+                    For this reason, I reject the claims of Abrahamic and certain non-Abrahamic religions that portray God as the creator—infinite and all-knowing—yet somehow existing <em>outside</em> our universe. Here we encounter a fundamental contradiction: how can an infinite entity exist outside the finite elements of its own nature? If we were created in God's image, then we must be part of God. An infinite being, by definition, includes all elements of its kind within an infinite set. Logic therefore compels me to conclude that as a human created in the image of an infinite entity, I am a part of that entity. Unless everything is included within God, the term "infinite" becomes meaningless. To emphasize: believing in God as infinite means that all human beings—despite differences in ethnicity, culture, skin color, and physical features—are made in God's image and together form part of the complete, infinite whole.
+                </p>
+
+                <div class="proposition">
+                    <strong>Proposition 1.0:</strong> <em>If God is infinite, then all elements in the universe—matter, antimatter, dark matter, and dark energy—must be included in any conception of an infinite God.</em>
+                </div>
+
+                <h2>The Equality of All Beings</h2>
+                <p>
+                    We are all fundamentally the same. Whether or not you believe we were created in God's image, we categorize ourselves as the set of <em>humans</em>. Yet this set is merely a finite subset of the infinite set that encompasses everything — what one may call God, or something else; the name is not important here, but the idea represents an infinite entity. Each individual is one element of this potentially infinite entity, which means everyone holds an equal position within it. Rich or poor, famous or unknown, powerful or isolated, intelligent or simple—these distinctions are insignificant. Every individual contributes the same quantitative value to the infinite whole.
+                </p>
+
+                <p>
+                    This logical conclusion demands that everyone be treated with equal dignity, regardless of social status. Power, wealth, or religious authority are irrelevant. Each person deserves equal honor because everyone plays an equal role in relation to the infinite Being. When I compare myself to someone from Asia, America, or Indigenous Australia, we all occupy the same fundamental position. As finite subsets of an infinite set, these individuals are merely reflections of me existing in different coordinates of space and time. Therefore, respecting all individuals is essential—for the other person is also me, experiencing existence from a different vantage point.
+                </p>
+
+                <p>
+                    You might ask: if the other person is also me, why do they seem more evil, or more talented? I will address this question more fully in part B, but briefly: we play the same role in different ways, just as we kill animals to survive and die so that our bodies fertilise the soil from which new life grows.
+                </p>
+
+                <h2>A Universal God, Free from Dogma</h2>
+                <p>
+                    This belief, grounded in mathematical reasoning, stands free from dogma and geographical influence. It envisions an infinite God containing universal love—not a deity who favors certain people but one who loves all equally and simultaneously. We have seen how everyone is equal before God, and how no one holds a privileged position, despite what some may claim for priests, popes, pastors or other religious authorities. Therefore, I find these claims nonsensical, especially if one believes these individuals are closer to God than oneself.
+                </p>
+
+                <h2>The Question of Agency</h2>
+                <p>
+                    <em>Now, who or what governs all people, animals, and non-living substances?</em>
+                </p>
+
+                <p>
+                    To me, this governing force resembles sunlight that shines equally on all things within its reach, showing no special treatment to any. This leads me to consider something similar: the laws of physics.
+                </p>
+
+                <p>
+                    <em>Are the laws of physics God?</em>
+                </p>
+
+                <p>
+                    The laws of physics are understood through mathematical logic, which means our knowledge of them is limited by our understanding of mathematics. Yet all things in the universe follow these physical laws whether we comprehend them or not. Like code running a video game or DNA determining eye color. The universal phenomenon obeys these laws of physics.
+                </p>
+
+                <p>
+                    However, calling the laws of physics "God" would be an understatement. If God is infinite, then the laws of physics are merely a subset of that infinity. Some argue that not everything can be described by physical laws—citing miracles or luck as exceptions.
+                </p>
+
+                <h2>The Question of Miracles: A Critical Response</h2>
+                <p>
+                    As mentioned, phenomena in the universe follow a predictable path of physical law. From what I have observed from multiple people, miracles are influenced by prayers. The most important role of players in an individual and society is providing hope that a phenomenon will turn out the way they want, that they are metaphysical entities that are changing phenomena in one's way.
+                </p>
+
+                <p>
+                    However, I regard this as another kind of illusion. One might argue that miracles do happen, but I respond to them that those are pure probabilities. Each event in the world have a probability to happen or not, no matter how small or large the probability is. what some call miracles, I call a slim probability in that become a reality.
+                </p>
+
+                <p>
+                    Miracles are understood by many to be a violation of the laws of nature or that miracles happen outside the cause and effect principle that we understand physical laws to be. However this is contradictive to the physical laws because of the following example.
+                </p>
+
+                <p style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #e0e0e0; font-style: italic; color: #666;">
+                    <strong>Note:</strong> This essay represents an ongoing exploration of metaphysical questions through mathematical reasoning. Part B, which will develop the concept of absolute goodness and address further questions, is forthcoming.
+                </p>
             </div>
         </article>
-
-        <div class="comments-section">
-            <h2>Leave a Comment</h2>
-            <p class="comments-intro">Share your thoughts or your own programming journey!</p>
-            
-            <div class="comment-form">
-                <input type="text" id="nameInput" placeholder="Your Name" maxlength="50">
-                <textarea id="commentInput" placeholder="Your comment..." rows="4" maxlength="500"></textarea>
-                <div class="form-footer">
-                    <span class="char-count" id="charCount">0/500</span>
-                    <button id="submitBtn">Post Comment</button>
-                </div>
-            </div>
-
-            <div class="comments-list" id="commentsList">
-                <h3>Comments (<span id="commentCount">0</span>)</h3>
-                <div id="commentsContainer">
-                    <p class="no-comments">Be the first to comment!</p>
-                </div>
-            </div>
-        </div>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 My Blog. Built with ❤️ and hosted on GitHub Pages.</p>
+            <p>&copy; 2025 Muhoza's Blog. Built by Pilote Muhoza with ❤️ and hosted on GitHub Pages.</p>
         </div>
     </footer>
-
-    <script>
-        const nameInput = document.getElementById('nameInput');
-        const commentInput = document.getElementById('commentInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const charCount = document.getElementById('charCount');
-        const commentsContainer = document.getElementById('commentsContainer');
-        const commentCount = document.getElementById('commentCount');
-        const STORAGE_KEY = 'post2-comments';
-
-        // Load comments from localStorage
-        function loadComments() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                const comments = stored ? JSON.parse(stored) : [];
-                
-                // Sort by timestamp (newest first)
-                comments.sort((a, b) => b.timestamp - a.timestamp);
-                
-                displayComments(comments);
-            } catch (error) {
-                console.error('Error loading comments:', error);
-                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
-                commentCount.textContent = '0';
-            }
-        }
-
-        // Display comments
-        function displayComments(comments) {
-            if (comments.length === 0) {
-                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
-                commentCount.textContent = '0';
-                return;
-            }
-
-            commentCount.textContent = comments.length;
-            commentsContainer.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <div class="comment-header">
-                        <span class="comment-author">${escapeHtml(comment.name)}</span>
-                        <span class="comment-date">${formatDate(comment.timestamp)}</span>
-                    </div>
-                    <div class="comment-text">${escapeHtml(comment.text)}</div>
-                </div>
-            `).join('');
-        }
-
-        // Character counter
-        commentInput.addEventListener('input', () => {
-            const length = commentInput.value.length;
-            charCount.textContent = `${length}/500`;
-        });
-
-        // Submit comment
-        submitBtn.addEventListener('click', function() {
-            const name = nameInput.value.trim();
-            const text = commentInput.value.trim();
-
-            if (!name || !text) {
-                alert('Please fill in both your name and comment!');
-                return;
-            }
-
-            if (text.length > 500) {
-                alert('Comment is too long! Maximum 500 characters.');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Posting...';
-
-            setTimeout(function() {
-                try {
-                    const comment = {
-                        name: name,
-                        text: text,
-                        timestamp: Date.now()
-                    };
-
-                    // Get existing comments
-                    const stored = localStorage.getItem(STORAGE_KEY);
-                    const comments = stored ? JSON.parse(stored) : [];
-                    
-                    // Add new comment
-                    comments.push(comment);
-                    
-                    // Save back to localStorage
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-
-                    // Clear form
-                    nameInput.value = '';
-                    commentInput.value = '';
-                    charCount.textContent = '0/500';
-
-                    // Reload comments
-                    loadComments();
-
-                    alert('Comment posted successfully!');
-                } catch (error) {
-                    console.error('Error posting comment:', error);
-                    alert('Failed to post comment. Please try again.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Post Comment';
-                }
-            }, 100);
-        });
-
-        // Helper functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-            
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
-        }
-
-        // Load comments on page load
-        loadComments();
-    </script>
 </body>
 </html>
