@@ -479,29 +479,20 @@
         const charCount = document.getElementById('charCount');
         const commentsContainer = document.getElementById('commentsContainer');
         const commentCount = document.getElementById('commentCount');
+        const STORAGE_KEY = 'post2-comments';
 
-        // Load comments from storage
-        async function loadComments() {
+        // Load comments from localStorage
+        function loadComments() {
             try {
-                const result = await window.storage.list('post2-comment:');
-                if (result && result.keys && result.keys.length > 0) {
-                    const comments = [];
-                    for (const key of result.keys) {
-                        const commentData = await window.storage.get(key);
-                        if (commentData) {
-                            comments.push(JSON.parse(commentData.value));
-                        }
-                    }
-                    
-                    // Sort by timestamp (newest first)
-                    comments.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    displayComments(comments);
-                } else {
-                    commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
-                    commentCount.textContent = '0';
-                }
+                const stored = localStorage.getItem(STORAGE_KEY);
+                const comments = stored ? JSON.parse(stored) : [];
+                
+                // Sort by timestamp (newest first)
+                comments.sort((a, b) => b.timestamp - a.timestamp);
+                
+                displayComments(comments);
             } catch (error) {
+                console.error('Error loading comments:', error);
                 commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
                 commentCount.textContent = '0';
             }
