@@ -630,140 +630,251 @@ In the greater game of life, none of us chose to be here—we were thrown into e
 
     <script>
         const nameInput = document.getElementById('nameInput');
-        const commentInput = document.getElementById('commentInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const charCount = document.getElementById('charCount');
-        const commentsContainer = document.getElementById('commentsContainer');
-        const commentCount = document.getElementById('commentCount');
-        const STORAGE_KEY = 'post3-comments';
+const commentInput = document.getElementById('commentInput');
+const submitBtn = document.getElementById('submitBtn');
+const charCount = document.getElementById('charCount');
+const commentsContainer = document.getElementById('commentsContainer');
+const commentCount = document.getElementById('commentCount');
+const STORAGE_KEY = 'blog-god-post3-comments';
 
-        // Load comments from localStorage
-        function loadComments() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                const comments = stored ? JSON.parse(stored) : [];
-                
-                // Sort by timestamp (newest first)
-                comments.sort((a, b) => b.timestamp - a.timestamp);
-                
-                displayComments(comments);
-            } catch (error) {
-                console.error('Error loading comments:', error);
-                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
-                commentCount.textContent = '0';
-            }
+let activeReplyForm = null;
+let isLoading = false;
+
+// Load comments from shared storage
+async function loadComments() {
+    if (isLoading) return;
+    isLoading = true;
+
+    try {
+        const result = await window.storage.get(STORAGE_KEY, true);
+        const comments = result ? JSON.parse(result.value) : [];
+        
+        // Sort by timestamp (newest first)
+        comments.sort((a, b) => b.timestamp - a.timestamp);
+        
+        displayComments(comments);
+    } catch (error) {
+        console.error('Error loading comments:', error);
+        // Key might not exist yet
+        commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+        commentCount.textContent = '0';
+    } finally {
+        isLoading = false;
+    }
+}
+
+// Display comments and replies
+function displayComments(comments) {
+    if (comments.length === 0) {
+        commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+        commentCount.textContent = '0';
+        return;
+    }
+
+    // Count total comments + replies
+    let totalCount = comments.length;
+    comments.forEach(comment => {
+        if (comment.replies && comment.replies.length > 0) {
+            totalCount += comment.replies.length;
         }
+    });
 
-        // Display comments
-        function displayComments(comments) {
-            if (comments.length === 0) {
-                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
-                commentCount.textContent = '0';
-                return;
-            }
-
-            commentCount.textContent = comments.length;
-            commentsContainer.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <div class="comment-header">
-                        <span class="comment-author">${escapeHtml(comment.name)}</span>
-                        <span class="comment-date">${formatDate(comment.timestamp)}</span>
-                    </div>
-                    <div class="comment-text">${escapeHtml(comment.text)}</div>
+    commentCount.textContent = totalCount;
+    
+    commentsContainer.innerHTML = comments.map(comment => `
+        <div class="comment" data-id="${comment.id}">
+            <div class="comment-header">
+                <span class="comment-author">${escapeHtml(comment.name)}</span>
+                <span class="comment-date">${formatDate(comment.timestamp)}</span>
+            </div>
+            <div class="comment-text">${escapeHtml(comment.text)}</div>
+            <div class="comment-actions">
+                <button class="reply-btn" onclick="showReplyForm('${comment.id}')">Reply</button>
+            </div>
+            <div id="reply-form-${comment.id}"></div>
+            ${comment.replies && comment.replies.length > 0 ? `
+                <div class="replies">
+                    ${comment.replies.map(reply => `
+                        <div class="reply">
+                            <div class="comment-header">
+                                <span class="comment-author">${escapeHtml(reply.name)}</span>
+                                <span class="comment-date">${formatDate(reply.timestamp)}</span>
+                            </div>
+                            <div class="comment-text">${escapeHtml(reply.text)}</div>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('');
-        }
+            ` : ''}
+        </div>
+    `).join('');
+}
 
-        // Character counter
-        commentInput.addEventListener('input', () => {
-            const length = commentInput.value.length;
-            charCount.textContent = `${length}/500`;
-        });
+// Show reply form
+window.showReplyForm = function(commentId) {
+    // Close any existing reply form
+    if (activeReplyForm) {
+        activeReplyForm.remove();
+        activeReplyForm = null;
+    }
 
-        // Submit comment
-        submitBtn.addEventListener('click', function() {
-            const name = nameInput.value.trim();
-            const text = commentInput.value.trim();
+    const container = document.getElementById(`reply-form-${commentId}`);
+    const formHtml = `
+        <div class="reply-form">
+            <input type="text" id="reply-name-${commentId}" placeholder="Your Name" maxlength="50">
+            <textarea id="reply-text-${commentId}" placeholder="Your reply..." rows="3" maxlength="300"></textarea>
+            <div class="reply-form-actions">
+                <button class="cancel-reply" onclick="cancelReply('${commentId}')">Cancel</button>
+                <button class="submit-reply" onclick="submitReply('${commentId}')">Post Reply</button>
+            </div>
+        </div>
+    `;
+    container.innerHTML = formHtml;
+    activeReplyForm = container.querySelector('.reply-form');
+};
 
-            if (!name || !text) {
-                alert('Please fill in both your name and comment!');
-                return;
+// Cancel reply
+window.cancelReply = function(commentId) {
+    const container = document.getElementById(`reply-form-${commentId}`);
+    container.innerHTML = '';
+    activeReplyForm = null;
+};
+
+// Submit reply
+window.submitReply = async function(commentId) {
+    const nameField = document.getElementById(`reply-name-${commentId}`);
+    const textField = document.getElementById(`reply-text-${commentId}`);
+    const name = nameField.value.trim();
+    const text = textField.value.trim();
+
+    if (!name || !text) {
+        alert('Please fill in both your name and reply!');
+        return;
+    }
+
+    try {
+        // Get existing comments
+        const result = await window.storage.get(STORAGE_KEY, true);
+        const comments = result ? JSON.parse(result.value) : [];
+        
+        // Find the comment and add reply
+        const comment = comments.find(c => c.id === commentId);
+        if (comment) {
+            if (!comment.replies) {
+                comment.replies = [];
             }
-
-            if (text.length > 500) {
-                alert('Comment is too long! Maximum 500 characters.');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Posting...';
-
-            setTimeout(function() {
-                try {
-                    const comment = {
-                        name: name,
-                        text: text,
-                        timestamp: Date.now()
-                    };
-
-                    // Get existing comments
-                    const stored = localStorage.getItem(STORAGE_KEY);
-                    const comments = stored ? JSON.parse(stored) : [];
-                    
-                    // Add new comment
-                    comments.push(comment);
-                    
-                    // Save back to localStorage
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-
-                    // Clear form
-                    nameInput.value = '';
-                    commentInput.value = '';
-                    charCount.textContent = '0/500';
-
-                    // Reload comments
-                    loadComments();
-
-                    alert('Comment posted successfully!');
-                } catch (error) {
-                    console.error('Error posting comment:', error);
-                    alert('Failed to post comment. Please try again.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Post Comment';
-                }
-            }, 100);
-        });
-
-        // Helper functions
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-            
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
+            comment.replies.push({
+                name: name,
+                text: text,
+                timestamp: Date.now()
             });
+            
+            // Save back to storage
+            await window.storage.set(STORAGE_KEY, JSON.stringify(comments), true);
+            
+            // Reload comments
+            await loadComments();
+            
+            alert('Reply posted successfully!');
         }
+    } catch (error) {
+        console.error('Error posting reply:', error);
+        alert('Failed to post reply. Please try again.');
+    }
+};
 
-        // Load comments on page load
-        loadComments();
+// Character counter
+commentInput.addEventListener('input', () => {
+    const length = commentInput.value.length;
+    charCount.textContent = `${length}/500`;
+});
+
+// Submit main comment
+submitBtn.addEventListener('click', async function() {
+    const name = nameInput.value.trim();
+    const text = commentInput.value.trim();
+
+    if (!name || !text) {
+        alert('Please fill in both your name and comment!');
+        return;
+    }
+
+    if (text.length > 500) {
+        alert('Comment is too long! Maximum 500 characters.');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting...';
+
+    try {
+        const comment = {
+            id: 'comment-' + Date.now(),
+            name: name,
+            text: text,
+            timestamp: Date.now(),
+            replies: []
+        };
+
+        // Get existing comments
+        const result = await window.storage.get(STORAGE_KEY, true);
+        const comments = result ? JSON.parse(result.value) : [];
+        
+        // Add new comment
+        comments.push(comment);
+        
+        // Save to shared storage (true = shared with all users)
+        await window.storage.set(STORAGE_KEY, JSON.stringify(comments), true);
+
+        // Clear form
+        nameInput.value = '';
+        commentInput.value = '';
+        charCount.textContent = '0/500';
+
+        // Reload comments
+        await loadComments();
+
+        alert('Comment posted successfully!');
+    } catch (error) {
+        console.error('Error posting comment:', error);
+        alert('Failed to post comment. Please try again.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post Comment';
+    }
+});
+
+// Helper functions
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    });
+}
+
+// Load comments on page load
+loadComments();
+
+// Auto-refresh comments every 30 seconds to see new comments from others
+setInterval(loadComments, 30000);
     </script>
 </body>
 </html>
