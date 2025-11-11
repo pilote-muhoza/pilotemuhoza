@@ -227,6 +227,131 @@
             margin-top: 4rem;
         }
 
+        .comments-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .comments-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .comments-intro {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 3rem;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-count {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .comment-form button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .comment-form button:hover {
+            background: #0052a3;
+        }
+
+        .comment-form button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .comments-list h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .no-comments {
+            color: #888;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0066cc;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .comment-date {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .comment-text {
+            color: #444;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8rem;
@@ -247,6 +372,14 @@
             .post-content h2 {
                 font-size: 1.5rem;
             }
+
+            .comments-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .comment-form {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -254,7 +387,7 @@
     <header>
         <div class="container">
             <div class="site-title">
-                <a href="index.html">Muhoza's Blog</a>
+                <a href="index.html">My Blog</a>
             </div>
             <nav>
                 <a href="index.html">Home</a>
@@ -439,7 +572,7 @@
 
         <div class="comments-section">
             <h2>Leave a Comment</h2>
-            <p class="comments-intro">Share your thoughts or your own programming journey!</p>
+            <p class="comments-intro">Share your thoughts on this philosophical exploration!</p>
             
             <div class="comment-form">
                 <input type="text" id="nameInput" placeholder="Your Name" maxlength="50">
@@ -461,8 +594,146 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Muhoza's Blog. Built by Pilote Muhoza with ❤️ and hosted on GitHub Pages.</p>
+            <p>&copy; 2025 My Blog. Built with ❤️ and hosted on GitHub Pages.</p>
         </div>
     </footer>
+
+    <script>
+        const nameInput = document.getElementById('nameInput');
+        const commentInput = document.getElementById('commentInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const charCount = document.getElementById('charCount');
+        const commentsContainer = document.getElementById('commentsContainer');
+        const commentCount = document.getElementById('commentCount');
+        const STORAGE_KEY = 'post3-comments';
+
+        // Load comments from localStorage
+        function loadComments() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                const comments = stored ? JSON.parse(stored) : [];
+                
+                // Sort by timestamp (newest first)
+                comments.sort((a, b) => b.timestamp - a.timestamp);
+                
+                displayComments(comments);
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+                commentCount.textContent = '0';
+            }
+        }
+
+        // Display comments
+        function displayComments(comments) {
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = '<p class="no-comments">Be the first to comment!</p>';
+                commentCount.textContent = '0';
+                return;
+            }
+
+            commentCount.textContent = comments.length;
+            commentsContainer.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author">${escapeHtml(comment.name)}</span>
+                        <span class="comment-date">${formatDate(comment.timestamp)}</span>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Character counter
+        commentInput.addEventListener('input', () => {
+            const length = commentInput.value.length;
+            charCount.textContent = `${length}/500`;
+        });
+
+        // Submit comment
+        submitBtn.addEventListener('click', function() {
+            const name = nameInput.value.trim();
+            const text = commentInput.value.trim();
+
+            if (!name || !text) {
+                alert('Please fill in both your name and comment!');
+                return;
+            }
+
+            if (text.length > 500) {
+                alert('Comment is too long! Maximum 500 characters.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Posting...';
+
+            setTimeout(function() {
+                try {
+                    const comment = {
+                        name: name,
+                        text: text,
+                        timestamp: Date.now()
+                    };
+
+                    // Get existing comments
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    const comments = stored ? JSON.parse(stored) : [];
+                    
+                    // Add new comment
+                    comments.push(comment);
+                    
+                    // Save back to localStorage
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+
+                    // Clear form
+                    nameInput.value = '';
+                    commentInput.value = '';
+                    charCount.textContent = '0/500';
+
+                    // Reload comments
+                    loadComments();
+
+                    alert('Comment posted successfully!');
+                } catch (error) {
+                    console.error('Error posting comment:', error);
+                    alert('Failed to post comment. Please try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Post Comment';
+                }
+            }, 100);
+        });
+
+        // Helper functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Load comments on page load
+        loadComments();
+    </script>
 </body>
 </html>
