@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abanyarwanda Babahereji</title>
+    <title>Abanyarwanda Babahereji - Muhoza's Blog</title>
     <style>
         * {
             margin: 0;
@@ -12,24 +12,68 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
         }
 
+        /* Header styles from index page */
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1.site-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        nav {
+            margin-top: 1.5rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main content container */
         .container {
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow-x: auto;
+            max-width: 1400px;
+            margin: 0 auto 3rem auto;
         }
 
-        h1 {
+        h1.page-title {
             text-align: center;
-            color: #333;
+            color: #1a1a1a;
             margin-bottom: 30px;
+            font-size: 2rem;
         }
 
         .tree {
@@ -161,12 +205,46 @@
             border-top: 2px dashed #ddd;
             margin-top: 10px;
         }
+
+        /* Footer styles from index page */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #888;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            h1.site-title {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .header-container {
+                padding: 0 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-container">
+            <h1 class="site-title">Muhoza's Blog</h1>
+            <p class="tagline">Thoughts, stories, Readings and ideas</p>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>🌳 Abanyarwanda Babahereji</h1>
-        <div class="label">🌳 Familly Tree</div>
+        <h1 class="page-title">🌳 Abanyarwanda Babahereji</h1>
+        <div class="label">🌳 Family Tree</div>
         
         <div class="tree">
             <!-- Generation 1 -->
@@ -182,8 +260,6 @@
             <div class="generation">
                 <div class="couple">
                     <div class="person">INANGARAMA</div>
-                    <!-- <span class="plus">+</span> -->
-                    <!-- <div class="person">Wife</div> -->
                 </div>
             </div>
 
@@ -194,20 +270,7 @@
             <div class="generation">
                 <div class="couple">
                     <div class="person">BARITATIRA</div>
-                    <!-- <span class="plus">+</span> -->
-                    <!-- <div class="person"> -->
-                        <!-- Wife 1 -->
-                        <!-- <div class="wife-indicator">3 children</div> -->
-                    <!-- </div> -->
                 </div>
-                <!-- <div class="couple">
-                    <div class="person">Name 3</div>
-                    <span class="plus">+</span>
-                    <div class="person">
-                        Wife 2
-                        <div class="wife-indicator">7 children</div>
-                    </div>
-                </div> -->
             </div>
 
             <div class="connector"></div>
@@ -241,15 +304,14 @@
 
             <div class="connector"></div>
 
-            <!-- Generation 5 - Grandchildren (All in one row) -->
+            <!-- Generation 5 - Grandchildren -->
             <div class="label">Generation 5 - Grandchildren (70 total)</div>
             <div class="generation">
-                <!-- Wife 1's grandchildren (3 children × 7 each = 21) -->
                 <div class="family-branch">
                     <div style="font-size: 0.8em; color: #2196F3; font-weight: bold; margin-bottom: 5px;">NTAGORAMA + ... (abana)</div>
                     <div class="children-row">
                         <div class="grandchild wife1">1. BIZIMANA Gaudance</div>
-                        <div class="grandchild wife1">2.BARAHEMANA</div>
+                        <div class="grandchild wife1">2. BARAHEMANA</div>
                         <div class="grandchild wife1">3. NIYOKINDI</div>
                         <div class="grandchild wife1">4</div>
                         <div class="grandchild wife1">5</div>
@@ -265,25 +327,11 @@
                         <div class="grandchild wife1">3. MIGABO</div>
                         <div class="grandchild wife1">4. BAZOMBANZA</div>
                         <div class="grandchild wife1">5. GATERAMA</div>
-                        <div class="grandchild wife1">6. .. </div>
+                        <div class="grandchild wife1">6. ..</div>
                         <div class="grandchild wife1">7. ..</div>
                     </div>
                 </div>
-<!--
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #2196F3; font-weight: bold; margin-bottom: 5px;">Child 3's Family (Wife 1)</div>
-                    <div class="children-row">
-                        <div class="grandchild wife1">GC1</div>
-                        <div class="grandchild wife1">GC2</div>
-                        <div class="grandchild wife1">GC3</div>
-                        <div class="grandchild wife1">GC4</div>
-                        <div class="grandchild wife1">GC5</div>
-                        <div class="grandchild wife1">GC6</div>
-                        <div class="grandchild wife1">GC7</div>
-                    </div>
-                </div>
---->
-                <!-- Wife 2's grandchildren (7 children × 7 each = 49) -->
+
                 <div class="family-branch">
                     <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">1. NTUNGUMBURANYE Michel + NIYAKIRE madereine</div>
                     <div class="children-row">
@@ -293,7 +341,6 @@
                         <div class="grandchild wife2">4. HAJAYANDI Gérard</div>
                         <div class="grandchild wife2">5. NTUNGUMBURANYE Zacharie</div>
                         <div class="grandchild wife2">6. NTUNGUMBURANYE Dieudonné</div>
-                        <div class="grandchild wife2">7. IRIBAGIZA Mireille</div>
                         <div class="grandchild wife2">7. IRIBAGIZA Mireille</div>
                     </div>
                 </div>
@@ -355,7 +402,7 @@
                 <div class="family-branch">
                     <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">6. SINDAYIGANZA Joseph + NDAYENGENGE Buphémie</div>
                     <div class="children-row">
-                        <div class="grandchild wife2">1.BIZIMANA Nicodème </div>
+                        <div class="grandchild wife2">1. BIZIMANA Nicodème</div>
                         <div class="grandchild wife2">2. NDERAGAKURA Alexie (Binwa)</div>
                         <div class="grandchild wife2">3. KABERA ...</div>
                         <div class="grandchild wife2">4. ... Adèle</div>
@@ -369,15 +416,21 @@
                     <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">7. BUSHURI Emmanuel + MUHIMBARE Marcelline</div>
                     <div class="children-row">
                         <div class="grandchild wife2">1. KAGABO Shabani</div>
-                        <div class="grandchild wife2">2. ... Belise </div>
+                        <div class="grandchild wife2">2. ... Belise</div>
                         <div class="grandchild wife2">3. RUBARIRWA Léonard</div>
                         <div class="grandchild wife2">4. HABONIMANA Doline</div>
-                        <div class="grandchild wife2">5. ... Yvone </div>
+                        <div class="grandchild wife2">5. ... Yvone</div>
                         <div class="grandchild wife2">6. KANYAMUNEZA Odile</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <div class="header-container">
+            <p>&copy; 2025 My Blog. Built with ❤️ and hosted on GitHub Pages.</p>
+        </div>
+    </footer>
 </body>
 </html>
