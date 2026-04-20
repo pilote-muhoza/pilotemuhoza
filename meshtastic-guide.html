@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building My Own Meshtastic Node — A Complete Guide - Muhoza's Public Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .site-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: #0066cc;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        article {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .post-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .epigraph {
+            font-style: italic;
+            color: #555;
+            border-left: 4px solid #0066cc;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.05rem;
+        }
+
+        .epigraph-author {
+            margin-top: 0.5rem;
+            text-align: right;
+            font-size: 0.95rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #0066cc;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .post-content h4 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        .post-content ul, .post-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.75rem;
+            color: #444;
+        }
+
+        .post-content em {
+            font-style: italic;
+        }
+
+        .post-content strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .post-content a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem 1.5rem 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+        }
+
+        .toc ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+
+        th {
+            background: #f0f4f8;
+            color: #1a1a1a;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid #d0d8e0;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #e8edf2;
+            color: #444;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fafbfc;
+        }
+
+        /* Code blocks */
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1.25rem 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        p code, li code {
+            background: #f0f0f0;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.92em;
+            color: #c0392b;
+        }
+
+        /* Info/warning boxes */
+        .note-box {
+            background: #e3f2fd;
+            border: 2px solid #42a5f5;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .warning-box {
+            background: #fff8e1;
+            border: 2px solid #ffa726;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .tip-box {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .box-icon {
+            font-size: 1.1rem;
+            margin-right: 0.4rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 1.75rem;
+            position: relative;
+            margin-bottom: 0.6rem;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #888;
+            font-size: 1rem;
+        }
+
+        /* Steps */
+        .step-block {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .step-block h4 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+
+        /* Results box */
+        .results-box {
+            background: #fce4ec;
+            border: 2px solid #ec407a;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        /* Resources table */
+        .resources-table td:first-child {
+            font-weight: 500;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #888;
+            margin-top: 4rem;
+        }
+
+        .comments-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .comments-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .comments-intro {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            article {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .comments-section {
+                padding: 2rem 1.5rem;
+            }
+
+            pre {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-title">
+                <a href="index.html">Muhoza's Public Journal</a>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="back-link">← Back to all posts</a>
+
+        <article>
+            <div class="post-header">
+                <h1>Building My Own Meshtastic Node — A Complete Guide</h1>
+                <div class="subtitle">A hands-on walkthrough of building a LoRa mesh networking device using WisBlock hardware and Meshtastic firmware</div>
+                <div class="meta">Pilote Muhoza · 2025</div>
+            </div>
+
+            <div class="post-content">
+
+                <div class="epigraph">
+                    "The amateur is the one who loves what they do; the professional merely does it for money. Build things because you love the craft."
+                    <div class="epigraph-author">— paraphrased from G.K. Chesterton</div>
+                </div>
+
+                <div class="toc">
+                    <div class="toc-title">Table of Contents</div>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#what-is-meshtastic">What is Meshtastic?</a></li>
+                        <li><a href="#components">Components Used</a></li>
+                        <li><a href="#specs">Technical Specifications</a></li>
+                        <li><a href="#assembly">Hardware Assembly</a></li>
+                        <li><a href="#firmware">Firmware &amp; Configuration</a></li>
+                        <li><a href="#mesh-role">Mesh Role Setup</a></li>
+                        <li><a href="#battery">Battery &amp; Enclosure</a></li>
+                        <li><a href="#testing">Testing the Node</a></li>
+                        <li><a href="#results">Results &amp; Range</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </div>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    This guide documents how I built my own <a href="https://meshtastic.org/" target="_blank">Meshtastic</a> nodes using RAKwireless WisBlock hardware. Meshtastic is an open-source, off-grid mesh networking project that lets devices communicate over LoRa radio without any internet or cellular connection — perfect for hiking, disaster comms, or just geeking out.
+                </p>
+
+                <h2 id="what-is-meshtastic">What is Meshtastic?</h2>
+                <p>
+                    <a href="https://meshtastic.org/" target="_blank">Meshtastic</a> is a free, open-source project that turns cheap LoRa radio boards into a long-range, off-grid mesh communication network. Devices relay messages across the mesh, extending range well beyond what a single radio can achieve.
+                </p>
+
+                <p>Key features:</p>
+                <ul>
+                    <li><strong>No internet required</strong> — works completely off-grid</li>
+                    <li><strong>Long range</strong> — LoRa radios can reach several kilometres line-of-sight</li>
+                    <li><strong>Encrypted</strong> — AES-256 encrypted by default</li>
+                    <li><strong>GPS support</strong> — share and track positions on a map</li>
+                    <li><strong>Phone integration</strong> — connect via Bluetooth to the Meshtastic app (iOS/Android)</li>
+                </ul>
+
+                <h2 id="components">Components Used</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Model</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🧠 Core Module</td>
+                                <td>RAK4631</td>
+                                <td>Nordic nRF52840 SoC + SX1262 LoRa transceiver</td>
+                            </tr>
+                            <tr>
+                                <td>📋 Base Board</td>
+                                <td>RAK19007</td>
+                                <td>WisBlock Base Board (30 × 60 mm)</td>
+                            </tr>
+                            <tr>
+                                <td>📺 Display</td>
+                                <td>RAK1921</td>
+                                <td>0.96" OLED display module</td>
+                            </tr>
+                            <tr>
+                                <td>📡 Antenna</td>
+                                <td>2 dBi rubber duck antenna</td>
+                                <td>External LoRa antenna</td>
+                            </tr>
+                            <tr>
+                                <td>🔋 Battery</td>
+                                <td>3.7V 1100mAh LiPo</td>
+                                <td>Polymer Lithium Ion</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="specs">Technical Specifications</h2>
+
+                <h3>Core Module — RAK4631</h3>
+                <ul>
+                    <li><strong>SoC:</strong> Nordic nRF52840 (ARM Cortex-M4F @ 64 MHz)</li>
+                    <li><strong>LoRa Chip:</strong> Semtech SX1262</li>
+                    <li><strong>Firmware:</strong> Can be flashed from the web at <a href="https://flasher.meshtastic.org/" target="_blank">flasher.meshtastic.org</a> (use Chrome or Edge)</li>
+                    <li><strong>Bluetooth:</strong> BLE 5.0 (for phone app connectivity)</li>
+                    <li><strong>Interface:</strong> WisBlock IO connector (plugs directly into base board)</li>
+                </ul>
+
+                <h3>Base Board — RAK19007</h3>
+                <ul>
+                    <li><strong>Dimensions:</strong> 30 × 60 mm</li>
+                    <li><strong>Sensor Slots:</strong> 4 × WisBlock sensor slots</li>
+                    <li><strong>IO Slot:</strong> 1 × WisBlock IO slot</li>
+                    <li><strong>Power:</strong> USB-C charging + LiPo battery management (onboard TP4054 charger)</li>
+                    <li><strong>Connectors:</strong> nano-SIM slot, I²C, SPI, UART exposed via headers</li>
+                </ul>
+
+                <h3>Antenna</h3>
+                <ul>
+                    <li><strong>Type:</strong> 2 dBi rubber duck (omnidirectional)</li>
+                    <li><strong>Connector:</strong> IPEX/U.FL → SMA adapter</li>
+                    <li><strong>Gain:</strong> 2 dBi (improved range vs PCB trace antenna)</li>
+                </ul>
+
+                <h3>Battery</h3>
+                <ul>
+                    <li><strong>Chemistry:</strong> Lithium Polymer (LiPo)</li>
+                    <li><strong>Voltage:</strong> 3.7V nominal</li>
+                    <li><strong>Capacity:</strong> 1100 mAh</li>
+                    <li><strong>Connector:</strong> JST 1.25mm 2-pin (matches RAK19007 battery port)</li>
+                </ul>
+
+                <h2 id="assembly">Hardware Assembly</h2>
+
+                <div class="step-block">
+                    <h4>Step 1 — Prepare the RAK4631 Core Module</h4>
+                    <p style="margin-bottom: 0;">
+                        The RAK4631 can be flashed directly on the board from <a href="https://flasher.meshtastic.org/" target="_blank">flasher.meshtastic.org</a>. Verify the module is seated correctly before mounting.
+                    </p>
+                </div>
+
+                <div class="warning-box">
+                    <span class="box-icon">⚠️</span><strong>Handle the RAK4631 with care.</strong> Avoid touching the antenna pads or U.FL connector pins.
+                </div>
+
+                <div class="step-block">
+                    <h4>Step 2 — Mount RAK4631 onto RAK19007 Base Board</h4>
+                    <ol>
+                        <li>Align the RAK4631 with the <strong>WisBlock Core slot</strong> (the large central slot on the RAK19007).</li>
+                        <li>Press firmly and evenly until the connector clicks into place.</li>
+                        <li>Secure with the two small M1.2 screws included with the base board.</li>
+                    </ol>
+                </div>
+
+                <div class="step-block">
+                    <h4>Step 3 — Attach the RAK1921 OLED Display</h4>
+                    <ol>
+                        <li>Locate the <strong>IO slot</strong> on the RAK19007.</li>
+                        <li>Align the RAK1921 OLED module pins with the slot.</li>
+                        <li>Press firmly until seated. The OLED faces upward.</li>
+                    </ol>
+                </div>
+
+                <div class="tip-box">
+                    <span class="box-icon">💡</span>The RAK1921 uses I²C and is automatically detected by Meshtastic firmware.
+                </div>
+
+                <div class="step-block">
+                    <h4>Step 4 — Connect the Antenna</h4>
+                    <ol>
+                        <li>Locate the <strong>U.FL connector</strong> on the RAK4631.</li>
+                        <li>Attach the U.FL end of your antenna pigtail cable.</li>
+                        <li>Press straight down firmly — you'll feel/hear a faint click.</li>
+                        <li>Screw the SMA end of the pigtail to your <strong>2 dBi rubber antenna</strong>.</li>
+                    </ol>
+                </div>
+
+                <div class="warning-box">
+                    <span class="box-icon">⚠️</span><strong>Never power on the LoRa radio without an antenna connected.</strong> This can damage the SX1262 transceiver.
+                </div>
+
+                <div class="step-block">
+                    <h4>Step 5 — Connect the Battery</h4>
+                    <ol>
+                        <li>Plug the <strong>LiPo JST connector</strong> into the battery port on the RAK19007.</li>
+                        <li>Ensure polarity is correct — the RAKwireless JST standard is <strong>positive on the left</strong>.</li>
+                        <li>The onboard charger will handle charging when USB-C is connected.</li>
+                    </ol>
+                </div>
+
+                <h2 id="firmware">Firmware &amp; Configuration</h2>
+
+                <h3>Connecting to the Meshtastic App</h3>
+                <ol>
+                    <li>Download the <strong>Meshtastic app</strong> on your phone (<a href="https://apps.apple.com/app/meshtastic/id1586432531" target="_blank">iOS</a> | <a href="https://play.google.com/store/apps/details?id=com.geeksville.mesh" target="_blank">Android</a>).</li>
+                    <li>Power on your node — the OLED should display the Meshtastic boot screen.</li>
+                    <li>On your phone, open the app → tap <strong>+</strong> → select <strong>Bluetooth</strong>.</li>
+                    <li>Select your device from the list (e.g. <code>Meshtastic_XXXX</code>).</li>
+                    <li>Pair using the PIN shown on the OLED display.</li>
+                </ol>
+
+                <h3>Basic Configuration</h3>
+                <p>Once connected via the app, configure these settings:</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Recommended Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Region</strong></td>
+                                <td>Set to your country/region (e.g. <code>AU_915</code>)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Node Name</strong></td>
+                                <td>Give your node a unique name</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Role</strong></td>
+                                <td><code>CLIENT</code> (see below)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LoRa Preset</strong></td>
+                                <td><code>LONG_FAST</code> or <code>LONG_SLOW</code> for range</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bluetooth PIN</strong></td>
+                                <td>Set a custom PIN</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tip-box">
+                    <span class="box-icon">🇦🇺</span><strong>Australian users:</strong> Set region to <code>AU_915</code> to comply with local frequency regulations (915–928 MHz).
+                </div>
+
+                <h2 id="mesh-role">Mesh Role Setup</h2>
+
+                <h3>Client Role (with OLED Display)</h3>
+                <p>
+                    This node uses the <code>CLIENT</code> role — the standard role for a handheld or portable device that sends/receives messages and displays them on screen.
+                </p>
+
+                <p><strong>Why CLIENT?</strong></p>
+                <ul>
+                    <li>Participates in mesh routing (relays messages)</li>
+                    <li>Connects to phone app via Bluetooth</li>
+                    <li>Displays messages and node info on the RAK1921 OLED</li>
+                    <li>Low power mode available to extend battery life</li>
+                </ul>
+
+                <p><strong>Role configuration in the app:</strong></p>
+                <pre><code>Device Config → Role → CLIENT</code></pre>
+
+                <p>The OLED will show:</p>
+                <ul>
+                    <li>Node name &amp; short address</li>
+                    <li>Battery percentage</li>
+                    <li>Number of nodes in mesh</li>
+                    <li>Incoming messages</li>
+                </ul>
+
+                <h2 id="battery">Battery &amp; Enclosure</h2>
+
+                <h3>Battery Life Estimates</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>LoRa Preset</th>
+                                <th>BLE On</th>
+                                <th>Estimated Runtime</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LONG_FAST</td>
+                                <td>Yes</td>
+                                <td>~12–16 hours</td>
+                            </tr>
+                            <tr>
+                                <td>LONG_SLOW</td>
+                                <td>Yes</td>
+                                <td>~18–24 hours</td>
+                            </tr>
+                            <tr>
+                                <td>LONG_SLOW</td>
+                                <td>No (BT off)</td>
+                                <td>~30–40 hours</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tip-box">
+                    <span class="box-icon">💡</span>Disable Bluetooth when not syncing with your phone to significantly extend battery life.
+                </div>
+
+                <h3>Charging</h3>
+                <p>
+                    The RAK19007 includes onboard USB-C charging. Simply connect a standard USB-C cable to charge the LiPo. A full charge from empty takes approximately <strong>1.5–2 hours</strong>.
+                </p>
+
+                <h3>Enclosure Ideas</h3>
+                <ul>
+                    <li><strong>3D printed case</strong> — RAKwireless publishes STL files for WisBlock enclosures on their GitHub</li>
+                    <li><strong>Waterproof project box</strong> — Drill holes for antenna SMA passthrough and USB-C</li>
+                    <li><strong>Clip-on carabiner case</strong> — Ideal for hiking/outdoor use</li>
+                </ul>
+
+                <h2 id="testing">Testing the Node</h2>
+
+                <h3>Self-Test Checklist</h3>
+                <ul class="checklist">
+                    <li>OLED displays boot screen on power-on</li>
+                    <li>Node appears in Meshtastic app via Bluetooth</li>
+                    <li>Region is correctly configured</li>
+                    <li>Antenna is firmly connected</li>
+                    <li>Battery charging works via USB-C</li>
+                    <li>Node appears on <a href="https://meshtastic.org/map/" target="_blank">Meshtastic map</a> (if GPS module added)</li>
+                </ul>
+
+                <h3>Sending a Test Message</h3>
+                <ol>
+                    <li>Open the Meshtastic app.</li>
+                    <li>Tap the <strong>Messages</strong> tab.</li>
+                    <li>Send a message to <code>#Primary</code> channel.</li>
+                    <li>Confirm it appears on the OLED display.</li>
+                    <li>If other nodes are in range, they should receive and relay the message.</li>
+                </ol>
+
+                <h2 id="results">Results &amp; Range</h2>
+
+                <div class="results-box">
+                    <p style="margin-bottom: 0.5rem;"><em>Results vary significantly based on terrain, antenna height, and LoRa settings.</em></p>
+                    <p style="margin-bottom: 0;">In my testing:</p>
+                </div>
+
+                <ul>
+                    <li><strong>Urban environment:</strong> 1–2 km node-to-node</li>
+                    <li><strong>Suburban with elevation:</strong> 3–5 km</li>
+                    <li><strong>Line-of-sight (hilltop):</strong> 8+ km</li>
+                </ul>
+
+                <p>
+                    The 2 dBi external antenna provided a noticeable improvement over relying on a PCB trace antenna alone.
+                </p>
+
+                <h2 id="resources">Resources</h2>
+
+                <div class="table-wrapper">
+                    <table class="resources-table">
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Meshtastic Official Site</td>
+                                <td><a href="https://meshtastic.org" target="_blank">meshtastic.org</a></td>
+                            </tr>
+                            <tr>
+                                <td>Meshtastic Docs</td>
+                                <td><a href="https://meshtastic.org/docs" target="_blank">meshtastic.org/docs</a></td>
+                            </tr>
+                            <tr>
+                                <td>RAK4631 Datasheet</td>
+                                <td><a href="https://docs.rakwireless.com/Product-Categories/WisBlock/RAK4631" target="_blank">docs.rakwireless.com</a></td>
+                            </tr>
+                            <tr>
+                                <td>RAK19007 Datasheet</td>
+                                <td><a href="https://docs.rakwireless.com/Product-Categories/WisBlock/RAK19007" target="_blank">docs.rakwireless.com</a></td>
+                            </tr>
+                            <tr>
+                                <td>RAK1921 OLED Docs</td>
+                                <td><a href="https://docs.rakwireless.com/Product-Categories/WisBlock/RAK1921" target="_blank">docs.rakwireless.com</a></td>
+                            </tr>
+                            <tr>
+                                <td>WisBlock GitHub</td>
+                                <td><a href="https://github.com/RAKWireless/WisBlock" target="_blank">github.com/RAKWireless/WisBlock</a></td>
+                            </tr>
+                            <tr>
+                                <td>Meshtastic Firmware GitHub</td>
+                                <td><a href="https://github.com/meshtastic/firmware" target="_blank">github.com/meshtastic/firmware</a></td>
+                            </tr>
+                            <tr>
+                                <td>Meshtastic App (Android)</td>
+                                <td><a href="https://play.google.com/store/apps/details?id=com.geeksville.mesh" target="_blank">Google Play Store</a></td>
+                            </tr>
+                            <tr>
+                                <td>Meshtastic App (iOS)</td>
+                                <td><a href="https://apps.apple.com/app/meshtastic/id1586432531" target="_blank">Apple App Store</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #e0e0e0; font-style: italic; color: #666;">
+                    <strong>Note:</strong> If you have any questions or suggestions for this guide, please leave a comment below or send me a message directly. Found an issue or want to contribute? Feel free to open a PR or raise an issue.
+                </p>
+
+            </div>
+        </article>
+
+        <div class="comments-section">
+            <h2>Comments</h2>
+            <p class="comments-intro">Share your thoughts, questions, or build notes below! Or send me a message directly.</p>
+
+            <script src="https://utteranc.es/client.js"
+                    repo="pilote-muhoza/pilotemuhoza"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Muhoza's Blog. Built by Muhoza Pilote and hosted on GitHub Pages.</p>
+        </div>
+    </footer>
+</body>
+</html>
