@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abanyarwanda Babahereji - Muhoza's Public Journal</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -18,7 +14,6 @@
             background: #f5f5f5;
         }
 
-        /* Header styles from index page */
         header {
             background: white;
             border-bottom: 1px solid #e0e0e0;
@@ -26,86 +21,27 @@
             margin-bottom: 3rem;
         }
 
-        .header-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        .header-container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
+        h1.site-title { font-size: 2.5rem; margin-bottom: 0.5rem; color: #1a1a1a; }
+        .tagline { color: #666; font-size: 1.1rem; }
+        nav { margin-top: 1.5rem; }
+        nav a { color: #0066cc; text-decoration: none; margin-right: 1.5rem; font-weight: 500; }
+        nav a:hover { text-decoration: underline; }
 
-        h1.site-title {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .tagline {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        nav {
-            margin-top: 1.5rem;
-        }
-
-        nav a {
-            color: #0066cc;
-            text-decoration: none;
-            margin-right: 1.5rem;
-            font-weight: 500;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* Main content container */
         .container {
             background: white;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            overflow-x: auto;
             max-width: 1400px;
             margin: 0 auto 3rem auto;
         }
 
-        h1.page-title {
-            text-align: center;
-            color: #1a1a1a;
-            margin-bottom: 30px;
-            font-size: 2rem;
-        }
+        h1.page-title { text-align: center; color: #1a1a1a; margin-bottom: 30px; font-size: 2rem; }
 
-        .tree {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            min-width: fit-content;
-        }
+        .tree { display: flex; flex-direction: column; gap: 30px; }
 
-        .generation {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            align-items: flex-start;
-        }
-
-        .family-branch {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-        }
-
-        .couple {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .generation { display: flex; justify-content: center; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
 
         .person {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -119,72 +55,7 @@
             min-width: 100px;
         }
 
-        .person.single {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .wife-indicator {
-            font-size: 0.75em;
-            opacity: 0.9;
-            margin-top: 3px;
-        }
-
-        .plus {
-            color: #764ba2;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .children-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 100%;
-        }
-
-        .child {
-            background: #4CAF50;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            min-width: 70px;
-            text-align: center;
-        }
-
-        .child.wife1 {
-            background: #2196F3;
-        }
-
-        .child.wife2 {
-            background: #E91E63;
-        }
-
-        .grandchild {
-            background: #FF9800;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.75em;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .grandchild.wife1 {
-            background: #03A9F4;
-        }
-
-        .grandchild.wife2 {
-            background: #F06292;
-        }
-
-        .connector {
-            width: 2px;
-            height: 15px;
-            background: #764ba2;
-            margin: 0 auto;
-        }
+        .connector { width: 2px; height: 15px; background: #764ba2; margin: 0 auto; }
 
         .label {
             text-align: center;
@@ -196,36 +67,105 @@
             letter-spacing: 1px;
         }
 
-        .grandchildren-container {
+        .toolbar {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
             justify-content: center;
-            padding-top: 10px;
-            border-top: 2px dashed #ddd;
-            margin-top: 10px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        /* Footer styles from index page */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            color: #888;
-            margin-top: 4rem;
+        .toolbar button {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            color: #444;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            cursor: pointer;
         }
+
+        .toolbar button:hover { background: #e6e6e6; }
+
+        .lineages { display: flex; flex-direction: column; gap: 10px; }
+
+        details.branch {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 10px 15px;
+        }
+
+        details.branch[open] { border-color: #764ba2; }
+
+        details.branch > summary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            padding: 4px 0;
+        }
+
+        details.branch > summary::-webkit-details-marker { display: none; }
+
+        details.branch > summary::before {
+            content: "▶";
+            font-size: 0.7em;
+            color: #764ba2;
+            transition: transform 0.15s ease;
+        }
+
+        details.branch[open] > summary::before { transform: rotate(90deg); }
+
+        .branch-tag {
+            padding: 3px 10px;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.8em;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .branch-tag.wife1 { background: #2196F3; }
+        .branch-tag.wife2 { background: #E91E63; }
+
+        .branch-spouse { color: #888; font-weight: normal; font-size: 0.85em; }
+        .branch-count { color: #aaa; font-weight: normal; font-size: 0.8em; margin-left: auto; }
+
+        .branch-body {
+            padding: 12px 0 6px 26px;
+            border-left: 2px dashed #ddd;
+            margin-left: 6px;
+            margin-top: 8px;
+        }
+
+        .children-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+
+        .child {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+        .child .num { opacity: 0.75; font-size: 0.85em; font-variant-numeric: tabular-nums; }
+        .child.wife1 { background: #2196F3; }
+        .child.wife2 { background: #E91E63; }
+        .child.unknown { background: #b0b0b0; font-style: italic; }
+
+        .branch-body .lineages { margin-top: 4px; }
+
+        footer { text-align: center; padding: 3rem 0; color: #888; margin-top: 4rem; }
 
         @media (max-width: 768px) {
-            h1.site-title {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 1.5rem;
-            }
-
-            .header-container {
-                padding: 0 1rem;
-            }
+            h1.site-title { font-size: 2rem; }
+            .container { padding: 1.5rem; }
+            .header-container { padding: 0 1rem; }
+            .branch-body { padding-left: 14px; margin-left: 2px; }
         }
     </style>
 </head>
@@ -245,186 +185,271 @@
     <div class="container">
         <h1 class="page-title">🌳 Abanyarwanda Babahereji</h1>
         <div class="label">🌳 Family Tree</div>
-        
+
         <div class="tree">
-            <!-- Generation 1 -->
             <div class="label">Generation 1</div>
-            <div class="generation">
-                <div class="person">RUYORA</div>
-            </div>
-
+            <div class="generation"><div class="person">RUYORA</div></div>
             <div class="connector"></div>
 
-            <!-- Generation 2 -->
             <div class="label">Generation 2</div>
-            <div class="generation">
-                <div class="couple">
-                    <div class="person">INANGARAMA</div>
-                </div>
-            </div>
-
+            <div class="generation"><div class="person">INANGARAMA</div></div>
             <div class="connector"></div>
 
-            <!-- Generation 3 -->
             <div class="label">Generation 3</div>
-            <div class="generation">
-                <div class="couple">
-                    <div class="person">BARITATIRA</div>
-                </div>
-            </div>
-
+            <div class="generation"><div class="person">BARITATIRA</div></div>
             <div class="connector"></div>
 
-            <!-- Generation 4 - Children -->
-            <div class="label">Generation 4 - Children</div>
-            <div class="generation">
-                <!-- Wife 1's children -->
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #2196F3; font-weight: bold; margin-bottom: 5px;">👤 BARITATIRA + Umugore 1</div>
-                    <div class="children-row">
-                        <div class="child wife1">1. NTAGORAMA</div>
-                        <div class="child wife1">2. KABUYENGE</div>
-                    </div>
-                </div>
-
-                <!-- Wife 2's children -->
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">👤 BARITATIRA + BAGEGUZA</div>
-                    <div class="children-row">
-                        <div class="child wife2">1. NTUNGUMBURANYE Michel</div>
-                        <div class="child wife2">2. BIDAGAZA Jervais</div>
-                        <div class="child wife2">3. KAGWEWE</div>
-                        <div class="child wife2">4. NGENGETEREZE Annatorie</div>
-                        <div class="child wife2">5. BUCIZANA</div>
-                        <div class="child wife2">6. SINDAYIGANZA Joseph</div>
-                        <div class="child wife2">7. BUSHURI Emmanuel</div>
-                    </div>
-                </div>
+            <!-- Numbering: each generation restarts at .1 within its own parent branch,
+                 in birth order (oldest first) — same convention used throughout, so
+                 4.1/4.2 are BARITATIRA's children in order, and 5.1/5.2/... are each
+                 4.x's children in order. Generation 6 would follow as 6.1, 6.2 ... -->
+            <div class="label">Descendants (click a name to expand their line)</div>
+            <div class="toolbar">
+                <button type="button" onclick="document.querySelectorAll('details.branch').forEach(d=>d.open=true)">Expand all</button>
+                <button type="button" onclick="document.querySelectorAll('details.branch').forEach(d=>d.open=false)">Collapse all</button>
             </div>
 
-            <div class="connector"></div>
+            <div class="lineages">
 
-            <!-- Generation 5 - Grandchildren -->
-            <div class="label">Generation 5 - Grandchildren (~70 total)</div>
-            <div class="generation">
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #2196F3; font-weight: bold; margin-bottom: 5px;">NTAGORAMA + ... (abana)</div>
-                    <div class="children-row">
-                        <div class="grandchild wife1">1. BIZIMANA Gaudance</div>
-                        <div class="grandchild wife1">2. BARAHEMANA</div>
-                        <div class="grandchild wife1">3. NIYOKINDI</div>
-                        <div class="grandchild wife1">4</div>
-                        <div class="grandchild wife1">5</div>
-                        <div class="grandchild wife1">6</div>
-                    </div>
-                </div>
+                <!-- ===== WIFE 1's LINE ===== -->
+                <details class="branch">
+                    <summary>
+                        <span class="branch-tag wife1">Umugore 1</span> BARITATIRA + Umugore 1
+                        <span class="branch-count">2 children</span>
+                    </summary>
+                    <div class="branch-body">
+                        <div class="lineages">
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #2196F3; font-weight: bold; margin-bottom: 5px;">KABUYENGE + ... (abana)</div>
-                    <div class="children-row">
-                        <div class="grandchild wife1">1. KARASUBUTARE</div>
-                        <div class="grandchild wife1">2. MBONIMPA</div>
-                        <div class="grandchild wife1">3.. GATERAMA</div>
-                        <div class="grandchild wife1">4. MIGABO</div>
-                        <div class="grandchild wife1">5. BAZOMBANZA</div>
-                        <div class="grandchild wife1">6. ..</div>
-                        <div class="grandchild wife1">7. ..</div>
-                    </div>
-                </div>
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife1">4.1</span> NTAGORAMA
+                                    <span class="branch-count">6 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife1"><span class="num">5.1</span> BIZIMANA Gaudance</div>
+                                        <div class="child wife1"><span class="num">5.2</span> BARAHEMANA</div>
+                                        <div class="child wife1"><span class="num">5.3</span> NIYOKINDI</div>
+                                        <div class="child wife1 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
+                                        <div class="child wife1 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
+                                        <div class="child wife1 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
+                                    </div>
+                                </div>
+                            </details>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">1. NTUNGUMBURANYE Michel + NIYAKIRE madereine</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. HAKIZIMANA Régine</div>
-                        <div class="grandchild wife2">2. NGENZEBUHORO J.Marie</div>
-                        <div class="grandchild wife2">3. UWIMANA Marie</div>
-                        <div class="grandchild wife2">4. HAJAYANDI Gérard</div>
-                        <div class="grandchild wife2">5. NTUNGUMBURANYE Zacharie</div>
-                        <div class="grandchild wife2">6. NTUNGUMBURANYE Dieudonné</div>
-                        <div class="grandchild wife2">7. IRIBAGIZA Mireille</div>
-                    </div>
-                </div>
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife1">4.2</span> KABUYENGE
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife1"><span class="num">5.1</span> KARASUBUTARE</div>
+                                        <div class="child wife1"><span class="num">5.2</span> MBONIMPA</div>
+                                        <div class="child wife1"><span class="num">5.3</span> GATERAMA</div>
+                                        <div class="child wife1"><span class="num">5.4</span> MIGABO</div>
+                                        <div class="child wife1"><span class="num">5.5</span> BAZOMBANZA</div>
+                                        <div class="child wife1 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
+                                        <div class="child wife1 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
+                                    </div>
+                                </div>
+                            </details>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">2. BIDAGAZA Gervais + NTIBAHEZWA</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. MUNEZERO Judith</div>
-                        <div class="grandchild wife2">2. GAKIZA Gaspard</div>
-                        <div class="grandchild wife2">3. KAKUNZE Aline</div>
-                        <div class="grandchild wife2">4. BUKEYENEZA Charles</div>
-                        <div class="grandchild wife2">5. INABAKOBWA Jeacqueline</div>
-                        <div class="grandchild wife2">6. BIDAGAZA J. Paul</div>
-                        <div class="grandchild wife2">7. MUHIMPUNDU Adelaide</div>
-                        <div class="grandchild wife2">8. BARITATIRA Nöel</div>
-                        <div class="grandchild wife2">9. BIDAGAZA Jeanne</div>
+                        </div>
                     </div>
-                </div>
+                </details>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">3. KAGWEGWE + ...</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. Ladégonde</div>
-                        <div class="grandchild wife2">2. Spès</div>
-                        <div class="grandchild wife2">3. Judith</div>
-                        <div class="grandchild wife2">...</div>
-                        <div class="grandchild wife2">...</div>
-                        <div class="grandchild wife2">...</div>
-                        <div class="grandchild wife2">...</div>
-                    </div>
-                </div>
+                <!-- ===== WIFE 2's LINE (BAGEGUZA) ===== -->
+                <details class="branch">
+                    <summary>
+                        <span class="branch-tag wife2">Umugore 2</span> BARITATIRA + BAGEGUZA
+                        <span class="branch-count">7 children</span>
+                    </summary>
+                    <div class="branch-body">
+                        <div class="lineages">
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">4. NGENGETEREZE Annatorie + ...</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. Jean Marie</div>
-                        <div class="grandchild wife2">2. ... Alexia</div>
-                        <div class="grandchild wife2">3. ...</div>
-                        <div class="grandchild wife2">4. ...</div>
-                        <div class="grandchild wife2">5. ...</div>
-                        <div class="grandchild wife2">6. ...</div>
-                        <div class="grandchild wife2">7. ...</div>
-                    </div>
-                </div>
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.1</span> NTUNGUMBURANYE Michel
+                                    <span class="branch-spouse">+ NIYAKIRE Madereine</span>
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> HAKIZIMANA Régine</div>
+                                        <div class="child wife2"><span class="num">5.3</span> UWIMANA Marie</div>
+                                        <div class="child wife2"><span class="num">5.5</span> NTUNGUMBURANYE Zacharie</div>
+                                        <div class="child wife2"><span class="num">5.6</span> NTUNGUMBURANYE Dieudonné</div>
+                                        <div class="child wife2"><span class="num">5.7</span> IRIBAGIZA Mireille</div>
+                                    </div>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">5. BUCIZANA</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. BINONGORI</div>
-                        <div class="grandchild wife2">2. ... Judith</div>
-                        <div class="grandchild wife2">3. ...</div>
-                        <div class="grandchild wife2">4. ...</div>
-                        <div class="grandchild wife2">5. ...</div>
-                        <div class="grandchild wife2">6. ...</div>
-                        <div class="grandchild wife2">7. ...</div>
-                    </div>
-                </div>
+                                    <div class="lineages">
+                                        <details class="branch">
+                                            <summary>
+                                                <span class="branch-tag wife2">5.2</span> NGENZEBUHORO J.Marie
+                                                <span class="branch-spouse">+ ...</span>
+                                                <span class="branch-count">1 child</span>
+                                            </summary>
+                                            <div class="branch-body">
+                                                <div class="lineages">
+                                                    <details class="branch">
+                                                        <summary>
+                                                            <span class="branch-tag wife2">6.1</span> Mugabo Nobel
+                                                            <span class="branch-spouse">+ ...</span>
+                                                            <span class="branch-count">1 child</span>
+                                                        </summary>
+                                                        <div class="branch-body">
+                                                            <div class="children-row">
+                                                                <div class="child wife2"><span class="num">7.1</span> Rema</div>
+                                                            </div>
+                                                        </div>
+                                                    </details>
+                                                </div>
+                                            </div>
+                                        </details>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">6. SINDAYIGANZA Joseph + NDAYENGENGE Buphémie</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. BIZIMANA Nicodème</div>
-                        <div class="grandchild wife2">2. NDERAGAKURA Alexie (Binwa)</div>
-                        <div class="grandchild wife2">3. KABERA ...</div>
-                        <div class="grandchild wife2">4. GAKOBWA Bernadette ...</div>
-                        <div class="grandchild wife2">5. ... Adèle</div>
-                        <div class="grandchild wife2">6. ... Béatrice</div>
-                        <div class="grandchild wife2">7. NDIKUMANA Francine</div>
-                        <div class="grandchild wife2">8. HABONIMANA Médiatrice</div>
-                    </div>
-                </div>
+                                        <details class="branch">
+                                            <summary>
+                                                <span class="branch-tag wife2">5.4</span> HAJAYANDI Gérard
+                                                <span class="branch-spouse">+ Habimana Evelyne</span>
+                                                <span class="branch-count">6 children</span>
+                                            </summary>
+                                            <div class="branch-body">
+                                                <div class="children-row">
+                                                    <div class="child wife2"><span class="num">6.1</span> Iradukunda Gloria</div>
+                                                    <div class="child wife2"><span class="num">6.2</span> Ntungumburanye Guy Michell <em style="font-style:italic; opacity:0.8;">(deceased, age 1)</em></div>
+                                                    <div class="child wife2"><span class="num">6.3</span> Muhoza Pilote 👑</div>
+                                                    <div class="child wife2"><span class="num">6.4</span> Mugisha Khalid</div>
+                                                    <div class="child wife2"><span class="num">6.5</span> Mutabazi Tonny</div>
+                                                    <div class="child wife2"><span class="num">6.6</span> Mizero Blessing</div>
+                                                </div>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </details>
 
-                <div class="family-branch">
-                    <div style="font-size: 0.8em; color: #E91E63; font-weight: bold; margin-bottom: 5px;">7. BUSHURI Emmanuel + MUHIMBARE Marcelline</div>
-                    <div class="children-row">
-                        <div class="grandchild wife2">1. KAGABO Shabani</div>
-                        <div class="grandchild wife2">2. ... Belise</div>
-                        <div class="grandchild wife2">3. RUBARIRWA Léonard</div>
-                        <div class="grandchild wife2">4. AHISHAKIYE Pierre</div>
-                        <div class="grandchild wife2">5. HABONIMANA Doline</div>
-                        <div class="grandchild wife2">6. ... Yvone</div>
-                        <div class="grandchild wife2">7. KANYAMUNEZA Odile</div>
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.2</span> BIDAGAZA Jervais
+                                    <span class="branch-spouse">+ NTIBAHEZWA</span>
+                                    <span class="branch-count">9 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> MUNEZERO Judith</div>
+                                        <div class="child wife2"><span class="num">5.2</span> GAKIZA Gaspard</div>
+                                        <div class="child wife2"><span class="num">5.3</span> KAKUNZE Aline</div>
+                                        <div class="child wife2"><span class="num">5.4</span> BUKEYENEZA Charles</div>
+                                        <div class="child wife2"><span class="num">5.5</span> INABAKOBWA Jeacqueline</div>
+                                        <div class="child wife2"><span class="num">5.6</span> BIDAGAZA J. Paul</div>
+                                        <div class="child wife2"><span class="num">5.7</span> MUHIMPUNDU Adelaide</div>
+                                        <div class="child wife2"><span class="num">5.8</span> BARITATIRA Nöel</div>
+                                        <div class="child wife2"><span class="num">5.9</span> BIDAGAZA Jeanne</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.3</span> KAGWEWE
+                                    <span class="branch-spouse">+ ...</span>
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> Ladégonde</div>
+                                        <div class="child wife2"><span class="num">5.2</span> Spès</div>
+                                        <div class="child wife2"><span class="num">5.3</span> Judith</div>
+                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.4</span> NGENGETEREZE Annatorie
+                                    <span class="branch-spouse">+ ...</span>
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> Jean Marie</div>
+                                        <div class="child wife2"><span class="num">5.2</span> Alexia</div>
+                                        <div class="child wife2 unknown"><span class="num">5.3</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.5</span> BUCIZANA
+                                    <span class="branch-spouse">+ ...</span>
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> BINONGORI</div>
+                                        <div class="child wife2"><span class="num">5.2</span> Judith</div>
+                                        <div class="child wife2 unknown"><span class="num">5.3</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
+                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.6</span> SINDAYIGANZA Joseph
+                                    <span class="branch-spouse">+ NDAYENGENGE Buphémie</span>
+                                    <span class="branch-count">8 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> BIZIMANA Nicodème</div>
+                                        <div class="child wife2"><span class="num">5.2</span> NDERAGAKURA Alexie (Binwa)</div>
+                                        <div class="child wife2"><span class="num">5.3</span> KABERA ...</div>
+                                        <div class="child wife2"><span class="num">5.4</span> GAKOBWA Bernadette ...</div>
+                                        <div class="child wife2"><span class="num">5.5</span> Adèle</div>
+                                        <div class="child wife2"><span class="num">5.6</span> Béatrice</div>
+                                        <div class="child wife2"><span class="num">5.7</span> NDIKUMANA Francine</div>
+                                        <div class="child wife2"><span class="num">5.8</span> HABONIMANA Médiatrice</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details class="branch">
+                                <summary>
+                                    <span class="branch-tag wife2">4.7</span> BUSHURI Emmanuel
+                                    <span class="branch-spouse">+ MUHIMBARE Marcelline</span>
+                                    <span class="branch-count">7 children</span>
+                                </summary>
+                                <div class="branch-body">
+                                    <div class="children-row">
+                                        <div class="child wife2"><span class="num">5.1</span> KAGABO Shabani</div>
+                                        <div class="child wife2"><span class="num">5.2</span> Belise</div>
+                                        <div class="child wife2"><span class="num">5.3</span> RUBARIRWA Léonard</div>
+                                        <div class="child wife2"><span class="num">5.4</span> AHISHAKIYE Pierre</div>
+                                        <div class="child wife2"><span class="num">5.5</span> HABONIMANA Doline</div>
+                                        <div class="child wife2"><span class="num">5.6</span> Yvone</div>
+                                        <div class="child wife2"><span class="num">5.7</span> KANYAMUNEZA Odile</div>
+                                    </div>
+                                </div>
+                            </details>
+
+                        </div>
                     </div>
-                </div>
+                </details>
+
             </div>
         </div>
     </div>
@@ -436,8 +461,3 @@
     </footer>
 </body>
 </html>
-
-
-
-
-
