@@ -1,466 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abanyarwanda Babahereji - Muhoza's Public Journal</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abanyarwanda Babahereji — Always-Expanded Tree</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background:#f5f5f5;
+    color:#333;
+    padding:2rem 1rem;
+  }
+  .container {
+    background:#fff;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  h1 { text-align:center; margin-bottom: 0.5rem; color:#1a1a1a; }
+  .subtitle { text-align:center; color:#888; margin-bottom: 1.5rem; font-size:0.9em; line-height:1.5; }
+  .subtitle b { color:#764ba2; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-        }
+  .legend {
+    display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+    margin-bottom: 1.2rem; font-size:0.85em;
+  }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .swatch { width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .swatch.root { background:#764ba2; }
+  .swatch.wife1 { background:#2196F3; }
+  .swatch.wife2 { background:#E91E63; }
+  .swatch.unknown { background:#b0b0b0; }
 
-        header {
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-        }
+  /* ---- Filter status bar ---- */
+  .status-bar {
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    margin-bottom:1.5rem; min-height:36px;
+  }
+  .status-bar .hint {
+    font-size:0.85em; color:#999; font-style:italic;
+  }
+  #resetBtn {
+    display:none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color:#fff; border:none; border-radius:20px;
+    padding:8px 18px; font-size:0.85em; font-weight:bold;
+    cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.15s ease;
+  }
+  #resetBtn:hover { transform: scale(1.05); }
+  #resetBtn.show { display:inline-block; }
 
-        .header-container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
-        h1.site-title { font-size: 2.5rem; margin-bottom: 0.5rem; color: #1a1a1a; }
-        .tagline { color: #666; font-size: 1.1rem; }
-        nav { margin-top: 1.5rem; }
-        nav a { color: #0066cc; text-decoration: none; margin-right: 1.5rem; font-weight: 500; }
-        nav a:hover { text-decoration: underline; }
+  /* ---- Tree structure ---- */
+  ul.tree, ul.tree ul {
+    list-style: none;
+    position: relative;
+  }
+  ul.tree { padding-left: 0; }
+  ul.tree ul { padding-left: 1.6rem; }
 
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 1400px;
-            margin: 0 auto 3rem auto;
-        }
+  ul.tree li {
+    position: relative;
+    padding: 0.35rem 0 0.35rem 1.6rem;
+    transition: opacity 0.2s ease;
+  }
 
-        h1.page-title { text-align: center; color: #1a1a1a; margin-bottom: 30px; font-size: 2rem; }
+  ul.tree li.hidden-node {
+    display:none;
+  }
 
-        .tree { display: flex; flex-direction: column; gap: 30px; }
+  /* vertical + horizontal connector lines */
+  ul.tree ul li::before {
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    width: 1.6rem; height: 0;
+    border-top: 2px solid #ddd;
+    margin-top: 1.15rem;
+  }
+  ul.tree ul li::after {
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    height: 100%; width: 0;
+    border-left: 2px solid #ddd;
+  }
+  ul.tree ul li:last-child::after {
+    height: 1.15rem;
+  }
+  /* remove connectors on the top-level ancestor chain (Gen 1-3, single-child each) */
+  ul.tree > li::before, ul.tree > li::after,
+  ul.tree > li > ul > li::before, ul.tree > li > ul > li::after,
+  ul.tree > li > ul > li > ul > li::before, ul.tree > li > ul > li > ul > li::after {
+    display:none;
+  }
 
-        .generation { display: flex; justify-content: center; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
+  /* ---- Node chips ---- */
+  .node {
+    display:inline-flex;
+    align-items:baseline;
+    gap:6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size:0.9em;
+    font-weight:bold;
+    color:#fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .node:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  }
+  .node.active-node {
+    outline: 3px solid #ffd54f;
+    outline-offset: 2px;
+  }
+  .node .tag {
+    font-size:0.75em;
+    opacity:0.8;
+    font-variant-numeric: tabular-nums;
+  }
+  .node .spouse {
+    font-weight:normal;
+    font-size:0.8em;
+    opacity:0.85;
+    margin-left:4px;
+  }
+  .node .count {
+    font-weight:normal;
+    font-size:0.75em;
+    opacity:0.7;
+    margin-left:6px;
+  }
+  .node.root   { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  .node.wife1  { background:#2196F3; }
+  .node.wife2  { background:#E91E63; }
+  .node.unknown{ background:#b0b0b0; font-style:italic; font-weight:normal; cursor:default; }
 
-        .person {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            font-size: 0.9em;
-            font-weight: bold;
-            min-width: 100px;
-        }
-
-        .connector { width: 2px; height: 15px; background: #764ba2; margin: 0 auto; }
-
-        .label {
-            text-align: center;
-            color: #666;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .toolbar {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .toolbar button {
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            color: #444;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            cursor: pointer;
-        }
-
-        .toolbar button:hover { background: #e6e6e6; }
-
-        .lineages { display: flex; flex-direction: column; gap: 10px; }
-
-        details.branch {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 10px 15px;
-        }
-
-        details.branch[open] { border-color: #764ba2; }
-
-        details.branch > summary {
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
-            padding: 4px 0;
-        }
-
-        details.branch > summary::-webkit-details-marker { display: none; }
-
-        details.branch > summary::before {
-            content: "▶";
-            font-size: 0.7em;
-            color: #764ba2;
-            transition: transform 0.15s ease;
-        }
-
-        details.branch[open] > summary::before { transform: rotate(90deg); }
-
-        .branch-tag {
-            padding: 3px 10px;
-            border-radius: 6px;
-            color: white;
-            font-size: 0.8em;
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .branch-tag.wife1 { background: #2196F3; }
-        .branch-tag.wife2 { background: #E91E63; }
-
-        .branch-spouse { color: #888; font-weight: normal; font-size: 0.85em; }
-        .branch-count { color: #aaa; font-weight: normal; font-size: 0.8em; margin-left: auto; }
-
-        .branch-body {
-            padding: 12px 0 6px 26px;
-            border-left: 2px dashed #ddd;
-            margin-left: 6px;
-            margin-top: 8px;
-        }
-
-        .children-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-
-        .child {
-            background: #4CAF50;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            display: flex;
-            align-items: baseline;
-            gap: 5px;
-        }
-        .child .num { opacity: 0.75; font-size: 0.85em; font-variant-numeric: tabular-nums; }
-        .child.wife1 { background: #2196F3; }
-        .child.wife2 { background: #E91E63; }
-        .child.unknown { background: #b0b0b0; font-style: italic; }
-
-        .branch-body .lineages { margin-top: 4px; }
-
-        footer { text-align: center; padding: 3rem 0; color: #888; margin-top: 4rem; }
-
-        @media (max-width: 768px) {
-            h1.site-title { font-size: 2rem; }
-            .container { padding: 1.5rem; }
-            .header-container { padding: 0 1rem; }
-            .branch-body { padding-left: 14px; margin-left: 2px; }
-        }
-    </style>
+  @media (max-width: 600px) {
+    ul.tree ul { padding-left: 1rem; }
+    ul.tree li { padding-left: 1rem; }
+    ul.tree ul li::before { width: 1rem; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <h1 class="site-title">Muhoza's Public Journal</h1>
-            <p class="tagline">Thoughts, stories, Readings and ideas</p>
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-            </nav>
-        </div>
-    </header>
+<div class="container">
+  <h1>🌳 Abanyarwanda Babahereji</h1>
+  <p class="subtitle">
+    <b>Gen 1</b> = RUYORA, down to <b>Gen 7</b> so far. A tag like "5.3" means Generation 5, person #3.<br>
+    Click a name to focus on their parents, grandparents, aunts/uncles, siblings &amp; children. Click it again to show everyone.
+  </p>
 
-    <div class="container">
-        <h1 class="page-title">🌳 Abanyarwanda Babahereji</h1>
-        <div class="label">🌳 Family Tree</div>
+  <div class="legend">
+    <span><span class="swatch root"></span> Direct ancestor line</span>
+    <span><span class="swatch wife1"></span> Umugore 1's line</span>
+    <span><span class="swatch wife2"></span> Umugore 2 (Bageguza)'s line</span>
+    <span><span class="swatch unknown"></span> Unrecorded</span>
+  </div>
 
-        <div class="tree">
-            <div class="label">Generation 1</div>
-            <div class="generation"><div class="person">RUYORA</div></div>
-            <div class="connector"></div>
+  <div class="status-bar">
+    <button id="resetBtn">↺ Show everyone</button>
+    <span class="hint" id="hintText">Tap any name to focus the tree around them</span>
+  </div>
 
-            <div class="label">Generation 2</div>
-            <div class="generation"><div class="person">INANGARAMA</div></div>
-            <div class="connector"></div>
+  <!--
+    ============================================================
+    HOW TO ADD CHILDREN (Generation 6 under a Generation 5 person)
+    ============================================================
+    Every Gen-5 node ("5.1", "5.2", ...) can have its own <ul> of
+    children. Copy ONE of the two templates below (matching the
+    color/lineage of the branch you're editing), paste it right
+    after the closing </span> of the Gen-5 <li> you want to add
+    kids to, then duplicate the inner <li> once per child and
+    bump the tag number (6.1, 6.2, 6.3...).
 
-            <div class="label">Generation 3</div>
-            <div class="generation"><div class="person">BARITATIRA</div></div>
-            <div class="connector"></div>
+    TEMPLATE — Umugore 1 / wife1 (blue) branch:
+    <ul>
+      <li><span class="node wife1"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
+      <li><span class="node wife1"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
+    </ul>
 
-            <!-- Numbering: each generation restarts at .1 within its own parent branch,
-                 in birth order (oldest first) — same convention used throughout, so
-                 4.1/4.2 are BARITATIRA's children in order, and 5.1/5.2/... are each
-                 4.x's children in order. Generation 6 would follow as 6.1, 6.2 ... -->
-            <div class="label">Descendants (click a name to expand their line)</div>
-            <div class="toolbar">
-                <button type="button" onclick="document.querySelectorAll('details.branch').forEach(d=>d.open=true)">Expand all</button>
-                <button type="button" onclick="document.querySelectorAll('details.branch').forEach(d=>d.open=false)">Collapse all</button>
-            </div>
+    TEMPLATE — Umugore 2 / wife2 (pink) branch:
+    <ul>
+      <li><span class="node wife2"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
+      <li><span class="node wife2"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
+    </ul>
 
-            <div class="lineages">
+    Notes:
+    - Drop the <span class="spouse">...</span> part entirely if you
+      don't know/have a spouse yet.
+    - If a child is unknown, use class="node unknown" and "?" as the name,
+      just like the placeholders already in this file (e.g. "5.4 ?").
+    - Same pattern works one generation deeper (Gen 6 -> Gen 7): just
+      nest another <ul> inside the child's <li> and use tag "7.1", "7.2"...
+    ============================================================
+  -->
 
-                <!-- ===== WIFE 1's LINE ===== -->
-                <details class="branch">
-                    <summary>
-                        <span class="branch-tag wife1">Umugore 1</span> BARITATIRA + Umugore 1
-                        <span class="branch-count">2 children</span>
-                    </summary>
-                    <div class="branch-body">
-                        <div class="lineages">
+  <ul class="tree" id="treeRoot">
+    <li><span class="node root"><span class="tag">Gen 1</span> RUYORA</span>
+      <ul><li><span class="node root"><span class="tag">Gen 2</span> INANGARAMA</span>
+        <ul><li><span class="node root"><span class="tag">Gen 3</span> BARITATIRA</span>
+          <ul>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife1">4.1</span> NTAGORAMA
-                                    <span class="branch-count">6 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife1"><span class="num">5.1</span> BIZIMANA Gaudance</div>
-                                        <div class="child wife1"><span class="num">5.2</span> BARAHEMANA</div>
-                                        <div class="child wife1"><span class="num">5.3</span> NIYOKINDI</div>
-                                        <div class="child wife1 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
-                                        <div class="child wife1 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
-                                        <div class="child wife1 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
-                                    </div>
-                                </div>
-                            </details>
+            <!-- ===== WIFE 1's LINE ===== -->
+            <li><span class="node wife1"><span class="tag">Gen 3 · Umugore 1</span> BARITATIRA + Umugore 1</span>
+              <ul>
+                <li><span class="node wife1"><span class="tag">4.1</span> NTAGORAMA</span>
+                  <ul>
+                    <li><span class="node wife1"><span class="tag">5.1</span> BIZIMANA Gaudance</span></li>
+                    <li><span class="node wife1"><span class="tag">5.2</span> BARAHEMANA</span></li>
+                    <li><span class="node wife1"><span class="tag">5.3</span> NIYOKINDI</span></li>
+                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                  </ul>
+                </li>
+                <li><span class="node wife1"><span class="tag">4.2</span> KABUYENGE</span>
+                  <ul>
+                    <li><span class="node wife1"><span class="tag">5.1</span> KARASUBUTARE</span></li>
+                    <li><span class="node wife1"><span class="tag">5.2</span> MBONIMPA</span></li>
+                    <li><span class="node wife1"><span class="tag">5.3</span> GATERAMA</span></li>
+                    <li><span class="node wife1"><span class="tag">5.4</span> MIGABO</span></li>
+                    <li><span class="node wife1"><span class="tag">5.5</span> BAZOMBANZA</span></li>
+                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife1">4.2</span> KABUYENGE
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife1"><span class="num">5.1</span> KARASUBUTARE</div>
-                                        <div class="child wife1"><span class="num">5.2</span> MBONIMPA</div>
-                                        <div class="child wife1"><span class="num">5.3</span> GATERAMA</div>
-                                        <div class="child wife1"><span class="num">5.4</span> MIGABO</div>
-                                        <div class="child wife1"><span class="num">5.5</span> BAZOMBANZA</div>
-                                        <div class="child wife1 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
-                                        <div class="child wife1 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
-                                    </div>
-                                </div>
-                            </details>
+            <!-- ===== WIFE 2's LINE (BAGEGUZA) ===== -->
+            <li><span class="node wife2"><span class="tag">Gen 3 · Umugore 2</span> BARITATIRA + BAGEGUZA</span>
+              <ul>
 
-                        </div>
-                    </div>
-                </details>
+                <li><span class="node wife2"><span class="tag">4.1</span> NTUNGUMBURANYE Michel<span class="spouse">+ NIYAKIRE Madereine</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> HAKIZIMANA Régine</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> NGENZEBUHORO J.Marie<span class="spouse">+ ...</span></span>
+                      <ul>
+                        <li><span class="node wife2"><span class="tag">6.1</span> Mugabo Nobel<span class="spouse">+ Michou Milady Musanase</span></span>
+                          <ul>
+                            <li><span class="node wife2"><span class="tag">7.1</span> Rema Mugabo</span></li>
+                          </ul>
+                        </li>
+                        <li><span class="node wife2"><span class="tag">6.2</span> Muco Nana</span></li>
+                        <li><span class="node wife2"><span class="tag">6.5</span> Iteka Ella</span></li>
+                        <li><span class="node wife2"><span class="tag">6.6</span> Teta Edna</span></li>
+                      </ul>
+                    </li>
+                    <li><span class="node wife2"><span class="tag">5.3</span> UWIMANA Marie</span></li>
+                    <li><span class="node wife2"><span class="tag">5.4</span> HAJAYANDI Gérard<span class="spouse">+ Habimana Evelyne</span></span>
+                      <ul>
+                        <li><span class="node wife2"><span class="tag">6.1</span> Iradukunda Gloria</span></li>
+                        <li><span class="node wife2"><span class="tag">6.2</span> Ntungumburanye Guy Michell <span class="spouse">(deceased, age 1)</span></span></li>
+                        <li><span class="node wife2"><span class="tag">6.3</span> Muhoza Pilote 👑</span></li>
+                        <li><span class="node wife2"><span class="tag">6.4</span> Mugisha Khalid</span></li>
+                        <li><span class="node wife2"><span class="tag">6.5</span> Mutabazi Tonny</span></li>
+                        <li><span class="node wife2"><span class="tag">6.6</span> Mizero Blessing</span></li>
+                      </ul>
+                    </li>
+                    <li><span class="node wife2"><span class="tag">5.5</span> NTUNGUMBURANYE Zacharie</span></li>
+                    <li><span class="node wife2"><span class="tag">5.6</span> NTUNGUMBURANYE Dieudonné</span></li>
+                    <li><span class="node wife2"><span class="tag">5.7</span> IRIBAGIZA Mireille</span></li>
+                  </ul>
+                </li>
 
-                <!-- ===== WIFE 2's LINE (BAGEGUZA) ===== -->
-                <details class="branch">
-                    <summary>
-                        <span class="branch-tag wife2">Umugore 2</span> BARITATIRA + BAGEGUZA
-                        <span class="branch-count">7 children</span>
-                    </summary>
-                    <div class="branch-body">
-                        <div class="lineages">
+                <li><span class="node wife2"><span class="tag">4.2</span> BIDAGAZA Jervais<span class="spouse">+ NTIBAHEZWA</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> MUNEZERO Judith</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> GAKIZA Gaspard</span></li>
+                    <li><span class="node wife2"><span class="tag">5.3</span> KAKUNZE Aline</span></li>
+                    <li><span class="node wife2"><span class="tag">5.4</span> BUKEYENEZA Charles</span></li>
+                    <li><span class="node wife2"><span class="tag">5.5</span> INABAKOBWA Jeacqueline</span></li>
+                    <li><span class="node wife2"><span class="tag">5.6</span> BIDAGAZA J. Paul</span></li>
+                    <li><span class="node wife2"><span class="tag">5.7</span> MUHIMPUNDU Adelaide</span></li>
+                    <li><span class="node wife2"><span class="tag">5.8</span> BARITATIRA Nöel</span></li>
+                    <li><span class="node wife2"><span class="tag">5.9</span> BIDAGAZA Jeanne</span></li>
+                  </ul>
+                </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.1</span> NTUNGUMBURANYE Michel
-                                    <span class="branch-spouse">+ NIYAKIRE Madereine</span>
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> HAKIZIMANA Régine</div>
-                                        <div class="child wife2"><span class="num">5.3</span> UWIMANA Marie</div>
-                                        <div class="child wife2"><span class="num">5.5</span> NTUNGUMBURANYE Zacharie</div>
-                                        <div class="child wife2"><span class="num">5.6</span> NTUNGUMBURANYE Dieudonné</div>
-                                        <div class="child wife2"><span class="num">5.7</span> IRIBAGIZA Mireille</div>
-                                    </div>
+                <li><span class="node wife2"><span class="tag">4.3</span> KAGWEWE<span class="spouse">+ ...</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> Ladégonde</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> Spès</span></li>
+                    <li><span class="node wife2"><span class="tag">5.3</span> Judith</span></li>
+                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                  </ul>
+                </li>
 
-                                    <div class="lineages">
-                                        <details class="branch">
-                                            <summary>
-                                                <span class="branch-tag wife2">5.2</span> NGENZEBUHORO J.Marie
-                                                <span class="branch-spouse">+ ...</span>
-                                                <span class="branch-count">6 children</span>
-                                            </summary>
-                                            <div class="branch-body">
-                                                <div class="children-row">
-                                                    <div class="child wife2"><span class="num">6.2</span> Muco Nana</div>
-                                                </div>
-                                                <div class="lineages">
-                                                    <details class="branch">
-                                                        <summary>
-                                                            <span class="branch-tag wife2">6.1</span> Mugabo Nobel
-                                                            <span class="branch-spouse">+ Michou Milady Musanase</span>
-                                                            <span class="branch-count">1 child</span>
-                                                        </summary>
-                                                        <div class="branch-body">
-                                                            <div class="children-row">
-                                                                <div class="child wife2"><span class="num">7.1</span>Rema Mugabo</div>
-                                                            </div>
-                                                        </div>
-                                                    </details>
-                                                </div>
-                                            </div>
-                                        </details>
+                <li><span class="node wife2"><span class="tag">4.4</span> NGENGETEREZE Annatorie<span class="spouse">+ ...</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> Jean Marie</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> Alexia</span></li>
+                    <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                  </ul>
+                </li>
 
-                                        <details class="branch">
-                                            <summary>
-                                                <span class="branch-tag wife2">5.4</span> HAJAYANDI Gérard
-                                                <span class="branch-spouse">+ Habimana Evelyne</span>
-                                                <span class="branch-count">6 children</span>
-                                            </summary>
-                                            <div class="branch-body">
-                                                <div class="children-row">
-                                                    <div class="child wife2"><span class="num">6.1</span> Iradukunda Gloria</div>
-                                                    <div class="child wife2"><span class="num">6.2</span> Ntungumburanye Guy Michell <em style="font-style:italic; opacity:0.8;">(deceased, age 1)</em></div>
-                                                    <div class="child wife2"><span class="num">6.3</span> Muhoza Pilote 👑</div>
-                                                    <div class="child wife2"><span class="num">6.4</span> Mugisha Khalid</div>
-                                                    <div class="child wife2"><span class="num">6.5</span> Mutabazi Tonny</div>
-                                                    <div class="child wife2"><span class="num">6.6</span> Mizero Blessing</div>
-                                                </div>
-                                            </div>
-                                        </details>
-                                    </div>
-                                </div>
-                            </details>
+                <li><span class="node wife2"><span class="tag">4.5</span> BUCIZANA<span class="spouse">+ ...</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> BINONGORI</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> Judith</span></li>
+                    <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                  </ul>
+                </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.2</span> BIDAGAZA Jervais
-                                    <span class="branch-spouse">+ NTIBAHEZWA</span>
-                                    <span class="branch-count">9 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> MUNEZERO Judith</div>
-                                        <div class="child wife2"><span class="num">5.2</span> GAKIZA Gaspard</div>
-                                        <div class="child wife2"><span class="num">5.3</span> KAKUNZE Aline</div>
-                                        <div class="child wife2"><span class="num">5.4</span> BUKEYENEZA Charles</div>
-                                        <div class="child wife2"><span class="num">5.5</span> INABAKOBWA Jeacqueline</div>
-                                        <div class="child wife2"><span class="num">5.6</span> BIDAGAZA J. Paul</div>
-                                        <div class="child wife2"><span class="num">5.7</span> MUHIMPUNDU Adelaide</div>
-                                        <div class="child wife2"><span class="num">5.8</span> BARITATIRA Nöel</div>
-                                        <div class="child wife2"><span class="num">5.9</span> BIDAGAZA Jeanne</div>
-                                    </div>
-                                </div>
-                            </details>
+                <li><span class="node wife2"><span class="tag">4.6</span> SINDAYIGANZA Joseph<span class="spouse">+ NDAYENGENGE Buphémie</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> BIZIMANA Nicodème</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> NDERAGAKURA Alexie (Binwa)</span></li>
+                    <li><span class="node wife2"><span class="tag">5.3</span> KABERA ...</span></li>
+                    <li><span class="node wife2"><span class="tag">5.4</span> GAKOBWA Bernadette ...</span></li>
+                    <li><span class="node wife2"><span class="tag">5.5</span> Adèle</span></li>
+                    <li><span class="node wife2"><span class="tag">5.6</span> Béatrice</span></li>
+                    <li><span class="node wife2"><span class="tag">5.7</span> NDIKUMANA Francine</span></li>
+                    <li><span class="node wife2"><span class="tag">5.8</span> HABONIMANA Médiatrice</span></li>
+                  </ul>
+                </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.3</span> KAGWEWE
-                                    <span class="branch-spouse">+ ...</span>
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> Ladégonde</div>
-                                        <div class="child wife2"><span class="num">5.2</span> Spès</div>
-                                        <div class="child wife2"><span class="num">5.3</span> Judith</div>
-                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
-                                    </div>
-                                </div>
-                            </details>
+                <li><span class="node wife2"><span class="tag">4.7</span> BUSHURI Emmanuel<span class="spouse">+ MUHIMBARE Marcelline</span></span>
+                  <ul>
+                    <li><span class="node wife2"><span class="tag">5.1</span> KAGABO Shabani</span></li>
+                    <li><span class="node wife2"><span class="tag">5.2</span> Belise</span></li>
+                    <li><span class="node wife2"><span class="tag">5.3</span> RUBARIRWA Léonard</span></li>
+                    <li><span class="node wife2"><span class="tag">5.4</span> AHISHAKIYE Pierre</span></li>
+                    <li><span class="node wife2"><span class="tag">5.5</span> HABONIMANA Doline</span></li>
+                    <li><span class="node wife2"><span class="tag">5.6</span> Yvone</span></li>
+                    <li><span class="node wife2"><span class="tag">5.7</span> KANYAMUNEZA Odile</span></li>
+                  </ul>
+                </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.4</span> NGENGETEREZE Annatorie
-                                    <span class="branch-spouse">+ ...</span>
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> Jean Marie</div>
-                                        <div class="child wife2"><span class="num">5.2</span> Alexia</div>
-                                        <div class="child wife2 unknown"><span class="num">5.3</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
-                                    </div>
-                                </div>
-                            </details>
+              </ul>
+            </li>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.5</span> BUCIZANA
-                                    <span class="branch-spouse">+ ...</span>
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> BINONGORI</div>
-                                        <div class="child wife2"><span class="num">5.2</span> Judith</div>
-                                        <div class="child wife2 unknown"><span class="num">5.3</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.4</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.5</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.6</span> ? (unrecorded)</div>
-                                        <div class="child wife2 unknown"><span class="num">5.7</span> ? (unrecorded)</div>
-                                    </div>
-                                </div>
-                            </details>
+          </ul>
+        </li></ul>
+      </li></ul>
+    </li>
+  </ul>
+</div>
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.6</span> SINDAYIGANZA Joseph
-                                    <span class="branch-spouse">+ NDAYENGENGE Buphémie</span>
-                                    <span class="branch-count">8 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> BIZIMANA Nicodème</div>
-                                        <div class="child wife2"><span class="num">5.2</span> NDERAGAKURA Alexie (Binwa)</div>
-                                        <div class="child wife2"><span class="num">5.3</span> KABERA ...</div>
-                                        <div class="child wife2"><span class="num">5.4</span> GAKOBWA Bernadette ...</div>
-                                        <div class="child wife2"><span class="num">5.5</span> Adèle</div>
-                                        <div class="child wife2"><span class="num">5.6</span> Béatrice</div>
-                                        <div class="child wife2"><span class="num">5.7</span> NDIKUMANA Francine</div>
-                                        <div class="child wife2"><span class="num">5.8</span> HABONIMANA Médiatrice</div>
-                                    </div>
-                                </div>
-                            </details>
+<script>
+(function () {
+  var treeRoot = document.getElementById('treeRoot');
+  var resetBtn = document.getElementById('resetBtn');
+  var hintText = document.getElementById('hintText');
+  var activeLi = null; // currently focused <li>, or null when showing everyone
 
-                            <details class="branch">
-                                <summary>
-                                    <span class="branch-tag wife2">4.7</span> BUSHURI Emmanuel
-                                    <span class="branch-spouse">+ MUHIMBARE Marcelline</span>
-                                    <span class="branch-count">7 children</span>
-                                </summary>
-                                <div class="branch-body">
-                                    <div class="children-row">
-                                        <div class="child wife2"><span class="num">5.1</span> KAGABO Shabani</div>
-                                        <div class="child wife2"><span class="num">5.2</span> Belise</div>
-                                        <div class="child wife2"><span class="num">5.3</span> RUBARIRWA Léonard</div>
-                                        <div class="child wife2"><span class="num">5.4</span> AHISHAKIYE Pierre</div>
-                                        <div class="child wife2"><span class="num">5.5</span> HABONIMANA Doline</div>
-                                        <div class="child wife2"><span class="num">5.6</span> Yvone</div>
-                                        <div class="child wife2"><span class="num">5.7</span> KANYAMUNEZA Odile</div>
-                                    </div>
-                                </div>
-                            </details>
+  function allLis() {
+    return treeRoot.querySelectorAll('li');
+  }
 
-                        </div>
-                    </div>
-                </details>
+  function revealSiblings(li) {
+    var parentUl = li.parentElement; // the <ul> holding li and its siblings
+    if (parentUl && parentUl.tagName === 'UL') {
+      Array.prototype.forEach.call(parentUl.children, function (sib) {
+        if (sib.tagName === 'LI') {
+          sib.classList.remove('hidden-node');
+        }
+      });
+    }
+  }
 
-            </div>
-        </div>
-    </div>
+  function showEveryone() {
+    allLis().forEach(function (li) {
+      li.classList.remove('hidden-node');
+    });
+    document.querySelectorAll('.node.active-node').forEach(function (n) {
+      n.classList.remove('active-node');
+    });
+    resetBtn.classList.remove('show');
+    hintText.textContent = 'Tap any name to focus the tree around them';
+    activeLi = null;
+  }
 
-    <footer>
-        <div class="header-container">
-            <p>&copy; 2025 Muhoza's Blog. Built Pilote Muhoza and hosted on GitHub Pages.</p>
-        </div>
-    </footer>
+  function focusOn(li) {
+    // 1. hide everything first
+    allLis().forEach(function (l) {
+      l.classList.add('hidden-node');
+    });
+
+    // 2. show the clicked node's entire subtree (children, grandchildren...)
+    li.querySelectorAll('li').forEach(function (l) {
+      l.classList.remove('hidden-node');
+    });
+    li.classList.remove('hidden-node');
+
+    // 3. show its immediate siblings (same generation, same parent)
+    revealSiblings(li);
+
+    // 4. walk up the ancestor chain (parents, grandparents... to the top),
+    //    and at every level also reveal THAT ancestor's siblings
+    //    (i.e. the person's aunts/uncles, great-aunts/uncles, etc.)
+    var current = li;
+    while (true) {
+      var parentLi = current.parentElement ? current.parentElement.closest('li') : null;
+      if (!parentLi) break;
+      parentLi.classList.remove('hidden-node');
+      revealSiblings(parentLi);
+      current = parentLi;
+    }
+
+    // highlight the clicked node
+    document.querySelectorAll('.node.active-node').forEach(function (n) {
+      n.classList.remove('active-node');
+    });
+    var nodeSpan = li.querySelector(':scope > .node');
+    if (nodeSpan) nodeSpan.classList.add('active-node');
+
+    resetBtn.classList.add('show');
+    hintText.textContent = 'Showing parents, aunts/uncles, siblings & children — click the name again to reset';
+    activeLi = li;
+  }
+
+  treeRoot.addEventListener('click', function (e) {
+    var nodeSpan = e.target.closest('.node');
+    if (!nodeSpan || nodeSpan.classList.contains('unknown')) return;
+
+    var li = nodeSpan.closest('li');
+    if (!li) return;
+
+    if (activeLi === li) {
+      // clicked the same node again -> reset
+      showEveryone();
+    } else {
+      focusOn(li);
+    }
+  });
+
+  resetBtn.addEventListener('click', showEveryone);
+})();
+</script>
 </body>
 </html>
