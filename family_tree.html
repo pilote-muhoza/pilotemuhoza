@@ -33,6 +33,9 @@
   .swatch.root { background:#764ba2; }
   .swatch.wife1 { background:#2196F3; }
   .swatch.wife2 { background:#E91E63; }
+  .swatch.gen5 { background:#00897B; }
+  .swatch.gen6 { background:#F57C00; }
+  .swatch.gen7 { background:#AD1457; }
   .swatch.unknown { background:#b0b0b0; }
 
   /* ---- Filter status bar ---- */
@@ -140,6 +143,11 @@
   .node.root   { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
   .node.wife1  { background:#2196F3; }
   .node.wife2  { background:#E91E63; }
+  /* Generation-based overrides: applied automatically by script below
+     based on the leading number in each .tag (e.g. "6.3.2" -> gen 6) */
+  .node.gen5   { background:#00897B; }
+  .node.gen6   { background:#F57C00; }
+  .node.gen7   { background:#AD1457; }
   .node.unknown{ background:#b0b0b0; font-style:italic; font-weight:normal; cursor:default; }
 
   @media (max-width: 600px) {
@@ -161,6 +169,9 @@
     <span><span class="swatch root"></span> Direct ancestor line</span>
     <span><span class="swatch wife1"></span> Umugore 1's line</span>
     <span><span class="swatch wife2"></span> Umugore 2 (Bageguza)'s line</span>
+    <span><span class="swatch gen5"></span> Generation 5</span>
+    <span><span class="swatch gen6"></span> Generation 6</span>
+    <span><span class="swatch gen7"></span> Generation 7</span>
     <span><span class="swatch unknown"></span> Unrecorded</span>
   </div>
 
@@ -180,23 +191,29 @@
     kids to, then duplicate the inner <li> once per child and
     bump the tag number (6.1, 6.2, 6.3...).
 
-    TEMPLATE — Umugore 1 / wife1 (blue) branch:
+    TEMPLATE — Umugore 1 / wife1 branch:
     <ul>
       <li><span class="node wife1"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
       <li><span class="node wife1"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
     </ul>
 
-    TEMPLATE — Umugore 2 / wife2 (pink) branch:
+    TEMPLATE — Umugore 2 / wife2 branch:
     <ul>
       <li><span class="node wife2"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
       <li><span class="node wife2"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
     </ul>
 
     Notes:
+    - You don't need to add "gen5"/"gen6"/"gen7" classes yourself —
+      a script reads the leading number in the tag (e.g. "6.3.2" -> 6,
+      "7.1" -> 7) and colors Generation 5/6/7 chips automatically.
+      The wife1/wife2 class you put in the HTML still controls the
+      color for Gen 1-4 nodes; from Gen 5 onward it gets overridden
+      by the generation color, but keep it there anyway for consistency.
     - Drop the <span class="spouse">...</span> part entirely if you
       don't know/have a spouse yet.
     - If a child is unknown, use class="node unknown" and "?" as the name,
-      just like the placeholders already in this file (e.g. "5.4 ?").
+      just like the placeholders already in this file.
     - Same pattern works one generation deeper (Gen 6 -> Gen 7): just
       nest another <ul> inside the child's <li> and use tag "7.1", "7.2"...
     ============================================================
@@ -369,6 +386,23 @@
   var resetBtn = document.getElementById('resetBtn');
   var hintText = document.getElementById('hintText');
   var activeLi = null; // currently focused <li>, or null when showing everyone
+
+  // ---- Auto-color by generation ----
+  // Reads the leading number in each .tag (e.g. "6.3.2" -> 6, "7.1" -> 7)
+  // and adds a "gen5"/"gen6"/"gen7" class so the CSS above can color it,
+  // overriding the wife1/wife2 lineage color for Gen 5 and beyond.
+  function applyGenerationColors() {
+    treeRoot.querySelectorAll('.node .tag').forEach(function (tagSpan) {
+      var match = tagSpan.textContent.trim().match(/^(\d+)\./);
+      if (!match) return; // skips "Gen 1", "Gen 2", "Gen 3 · Umugore 1", etc.
+      var gen = match[1];
+      if (gen === '5' || gen === '6' || gen === '7') {
+        var node = tagSpan.closest('.node');
+        if (node) node.classList.add('gen' + gen);
+      }
+    });
+  }
+  applyGenerationColors();
 
   function allLis() {
     return treeRoot.querySelectorAll('li');
