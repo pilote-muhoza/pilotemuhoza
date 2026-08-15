@@ -10,8 +10,46 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background:#f5f5f5;
     color:#333;
-    padding:2rem 1rem;
   }
+
+  /* ---- Header (matches the blog's header) ---- */
+  header {
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+  }
+  header .header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+  }
+  header .tagline {
+    color: #666;
+    font-size: 1.1rem;
+  }
+  header nav {
+    margin-top: 1.5rem;
+  }
+  header nav a {
+    color: #0066cc;
+    text-decoration: none;
+    margin-right: 1.5rem;
+    font-weight: 500;
+  }
+  header nav a:hover {
+    text-decoration: underline;
+  }
+
+  .page-wrap {
+    padding: 0 1rem 2rem;
+  }
+
   .container {
     background:#fff;
     max-width: 1000px;
@@ -20,7 +58,7 @@
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  h1 { text-align:center; margin-bottom: 0.5rem; color:#1a1a1a; }
+  .container > h1 { text-align:center; margin-bottom: 0.5rem; color:#1a1a1a; }
   .subtitle { text-align:center; color:#888; margin-bottom: 1.5rem; font-size:0.9em; line-height:1.5; }
   .subtitle b { color:#764ba2; }
 
@@ -154,100 +192,94 @@
     ul.tree ul { padding-left: 1rem; }
     ul.tree li { padding-left: 1rem; }
     ul.tree ul li::before { width: 1rem; }
+    header h1 { font-size: 2rem; }
+    header .header-inner { padding: 0 1rem; }
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🌳 Abanyarwanda Babahereji</h1>
-  <p class="subtitle">
-    <b>Gen 1</b> = RUYORA, down to <b>Gen 7</b> so far. A tag like "5.3" means Generation 5, person #3.<br>
-    Fyonda kwizina kugira ubone ubuntu umwe nabasokuru biwe hama ufyonde kandi kugira ugarukane vyose
-  </p>
 
-  <div class="legend">
-    <span><span class="swatch root"></span> Direct ancestor line</span>
-    <span><span class="swatch wife1"></span> Umugore 1's line</span>
-    <span><span class="swatch wife2"></span> Umugore 2 (Bageguza)'s line</span>
-    <span><span class="swatch gen5"></span> Generation 5</span>
-    <span><span class="swatch gen6"></span> Generation 6</span>
-    <span><span class="swatch gen7"></span> Generation 7</span>
-    <span><span class="swatch unknown"></span> Unrecorded</span>
-  </div>
+  <header>
+    <div class="header-inner">
+      <h1>Muhoza's Public Journal</h1>
+      <p class="tagline">Thoughts, stories, Readings and ideas</p>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-  <div class="status-bar">
-    <button id="resetBtn">↺ Show everyone</button>
-    <span class="hint" id="hintText">Tap any name to focus the tree around them</span>
-  </div>
+  <div class="page-wrap">
+  <div class="container">
+    <h1>🌳 Abanyarwanda Babahereji</h1>
+    <p class="subtitle">
+      <b>Gen 1</b> = RUYORA, down to <b>Gen 7</b> so far. A tag like "5.3" means Generation 5, person #3.<br>
+      Fyonda kwizina kugira ubone ubuntu umwe nabasokuru biwe hama ufyonde kandi kugira ugarukane vyose
+    </p>
 
-  <!--
-    ============================================================
-    HOW TO ADD CHILDREN (Generation 6 under a Generation 5 person)
-    ============================================================
-    Every Gen-5 node ("5.1", "5.2", ...) can have its own <ul> of
-    children. Copy ONE of the two templates below (matching the
-    color/lineage of the branch you're editing), paste it right
-    after the closing </span> of the Gen-5 <li> you want to add
-    kids to, then duplicate the inner <li> once per child and
-    bump the tag number (6.1, 6.2, 6.3...).
+    <div class="legend">
+      <span><span class="swatch root"></span> Direct ancestor line</span>
+      <span><span class="swatch wife1"></span> Umugore 1's line</span>
+      <span><span class="swatch wife2"></span> Umugore 2 (Bageguza)'s line</span>
+      <span><span class="swatch gen5"></span> Generation 5</span>
+      <span><span class="swatch gen6"></span> Generation 6</span>
+      <span><span class="swatch gen7"></span> Generation 7</span>
+      <span><span class="swatch unknown"></span> Unrecorded</span>
+    </div>
 
-    TEMPLATE — Umugore 1 / wife1 branch:
-    <ul>
-      <li><span class="node wife1"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
-      <li><span class="node wife1"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
-    </ul>
+    <div class="status-bar">
+      <button id="resetBtn">↺ Show everyone</button>
+      <span class="hint" id="hintText">Tap any name to focus the tree around them</span>
+    </div>
 
-    TEMPLATE — Umugore 2 / wife2 branch:
-    <ul>
-      <li><span class="node wife2"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
-      <li><span class="node wife2"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
-    </ul>
+    <!--
+      ============================================================
+      HOW TO ADD CHILDREN (Generation 6 under a Generation 5 person)
+      ============================================================
+      Every Gen-5 node ("5.1", "5.2", ...) can have its own <ul> of
+      children. Copy ONE of the two templates below (matching the
+      color/lineage of the branch you're editing), paste it right
+      after the closing </span> of the Gen-5 <li> you want to add
+      kids to, then duplicate the inner <li> once per child and
+      bump the tag number (6.1, 6.2, 6.3...).
 
-    Notes:
-    - You don't need to add "gen5"/"gen6"/"gen7" classes yourself —
-      a script reads the leading number in the tag (e.g. "6.3.2" -> 6,
-      "7.1" -> 7) and colors Generation 5/6/7 chips automatically.
-      The wife1/wife2 class you put in the HTML still controls the
-      color for Gen 1-4 nodes; from Gen 5 onward it gets overridden
-      by the generation color, but keep it there anyway for consistency.
-    - Drop the <span class="spouse">...</span> part entirely if you
-      don't know/have a spouse yet.
-    - If a child is unknown, use class="node unknown" and "?" as the name,
-      just like the placeholders already in this file.
-    - Same pattern works one generation deeper (Gen 6 -> Gen 7): just
-      nest another <ul> inside the child's <li> and use tag "7.1", "7.2"...
-    ============================================================
-  -->
+      TEMPLATE — Umugore 1 / wife1 branch:
+      <ul>
+        <li><span class="node wife1"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
+        <li><span class="node wife1"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
+      </ul>
 
-  <ul class="tree" id="treeRoot">
-    <li><span class="node root"><span class="tag">Gen 1</span> RUYORA</span>
-      <ul><li><span class="node root"><span class="tag">Gen 2</span> INANGARAMA</span>
-        <ul><li><span class="node root"><span class="tag">Gen 3</span> BARITATIRA</span>
-          <ul>
+      TEMPLATE — Umugore 2 / wife2 branch:
+      <ul>
+        <li><span class="node wife2"><span class="tag">6.1</span> FIRSTNAME LASTNAME<span class="spouse">+ SPOUSE NAME</span></span></li>
+        <li><span class="node wife2"><span class="tag">6.2</span> FIRSTNAME LASTNAME</span></li>
+      </ul>
 
-            <!-- ===== WIFE 1's LINE ===== -->
-            <li><span class="node wife1"><span class="tag">Gen 3 · Umugore 1</span> BARITATIRA + Umugore 1</span>
-              <ul>
-                <li><span class="node wife1"><span class="tag">4.1</span> NTAGORAMA</span>
-                  <ul>
-                    <li><span class="node wife1"><span class="tag">5.1</span> BIZIMANA Gaudance</span></li>
-                    <li><span class="node wife1"><span class="tag">5.2</span> BARAHEMANA</span></li>
-                    <li><span class="node wife1"><span class="tag">5.3</span> NIYOKINDI</span></li>
-                  </ul>
-                </li>
-                <li><span class="node wife1"><span class="tag">4.2</span> KABUYENGE</span>
-                  <ul>
-                    <li><span class="node wife1"><span class="tag">5.1</span> KARASUBUTARE</span></li>
-                    <li><span class="node wife1"><span class="tag">5.2</span> MBONIMPA</span></li>
-                    <li><span class="node wife1"><span class="tag">5.3</span> GATERAMA</span></li>
-                    <li><span class="node wife1"><span class="tag">5.4</span> MIGABO</span></li>
-                    <li><span class="node wife1"><span class="tag">5.5</span> BAZOMBANZA</span></li>
+      Notes:
+      - You don't need to add "gen5"/"gen6"/"gen7" classes yourself —
+        a script reads the leading number in the tag (e.g. "6.3.2" -> 6,
+        "7.1" -> 7) and colors Generation 5/6/7 chips automatically.
+        The wife1/wife2 class you put in the HTML still controls the
+        color for Gen 1-4 nodes; from Gen 5 onward it gets overridden
+        by the generation color, but keep it there anyway for consistency.
+      - Drop the <span class="spouse">...</span> part entirely if you
+        don't know/have a spouse yet.
+      - If a child is unknown, use class="node unknown" and "?" as the name,
+        just like the placeholders already in this file.
+      - Same pattern works one generation deeper (Gen 6 -> Gen 7): just
+        nest another <ul> inside the child's <li> and use tag "7.1", "7.2"...
+      ============================================================
+    -->
 
-                  </ul>
-                </li>
-              </ul>
-            </li>
+    <ul class="tree" id="treeRoot">
+      <li><span class="node root"><span class="tag">Gen 1</span> RUYORA</span>
+        <ul><li><span class="node root"><span class="tag">Gen 2</span> INANGARAMA</span>
+          <ul><li><span class="node root"><span class="tag">Gen 3</span> BARITATIRA</span>
+            <ul>
 
+<<<<<<< HEAD
             <!-- ===== WIFE 2's LINE (BAGEGUZA) ===== -->
             <li><span class="node wife2"><span class="tag">Gen 3 · Umugore 2</span> BARITATIRA + BAGEGUZA</span>
               <ul>
@@ -311,91 +343,178 @@
                   <ul>
                     <li><span class="node wife2"><span class="tag">5.1</span> MUNEZERO Judith</span></li>
                     <li><span class="node wife2"><span class="tag">5.2</span> GAKIZA Gaspard<span class="spouse">+ </span></span>
+=======
+              <!-- ===== WIFE 1's LINE ===== -->
+              <li><span class="node wife1"><span class="tag">Gen 3 · Umugore 1</span> BARITATIRA + Umugore 1</span>
+                <ul>
+                  <li><span class="node wife1"><span class="tag">4.1</span> NTAGORAMA</span>
+>>>>>>> 29f9e7a44cf5ccda973f48eb891e236f9f485c14
                     <ul>
-                        <li><span class="node wife2"><span class="tag">6.1 Gakiza Venuste</span> </span></li>
-                        <li><span class="node wife2"><span class="tag">6.2 Iranezereza Clairia</span> </span></li>
-                        <li><span class="node wife2"><span class="tag">6.3 Bidagaza Cherubin </span> </span></li>
-                        <li><span class="node wife2"><span class="tag">6.4 Gakiza Chérissa</span> </span></li>
-                        <li><span class="node unknown"><span class="tag">6.5 </span> ?</span></li>
+                      <li><span class="node wife1"><span class="tag">5.1</span> BIZIMANA Gaudance</span></li>
+                      <li><span class="node wife1"><span class="tag">5.2</span> BARAHEMANA</span></li>
+                      <li><span class="node wife1"><span class="tag">5.3</span> NIYOKINDI</span></li>
                     </ul>
-                    
-                    </li>
-                    <li><span class="node wife2"><span class="tag">5.3</span> KAKUNZE Aline</span></li>
-                    <li><span class="node wife2"><span class="tag">5.4</span> BUKEYENEZA Charles</span></li>
-                    <li><span class="node wife2"><span class="tag">5.5</span> INABAKOBWA Jeacqueline</span></li>
-                    <li><span class="node wife2"><span class="tag">5.6</span> BIDAGAZA J. Paul</span></li>
-                    <li><span class="node wife2"><span class="tag">5.7</span> MUHIMPUNDU Adelaide</span></li>
-                    <li><span class="node wife2"><span class="tag">5.8</span> BARITATIRA Nöel</span></li>
-                    <li><span class="node wife2"><span class="tag">5.9</span> BIDAGAZA Jeanne</span></li>
-                  </ul>
-                </li>
+                  </li>
+                  <li><span class="node wife1"><span class="tag">4.2</span> KABUYENGE</span>
+                    <ul>
+                      <li><span class="node wife1"><span class="tag">5.1</span> KARASUBUTARE</span></li>
+                      <li><span class="node wife1"><span class="tag">5.2</span> MBONIMPA</span></li>
+                      <li><span class="node wife1"><span class="tag">5.3</span> GATERAMA</span></li>
+                      <li><span class="node wife1"><span class="tag">5.4</span> MIGABO</span></li>
+                      <li><span class="node wife1"><span class="tag">5.5</span> BAZOMBANZA</span></li>
 
-                <li><span class="node wife2"><span class="tag">4.3</span> KAGWEWE<span class="spouse">+ ...</span></span>
-                  <ul>
-                    <li><span class="node wife2"><span class="tag">5.1</span> Ladégonde</span></li>
-                    <li><span class="node wife2"><span class="tag">5.2</span> Spès</span></li>
-                    <li><span class="node wife2"><span class="tag">5.3</span> Judith</span></li>
-                  </ul>
-                </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
 
-                <li><span class="node wife2"><span class="tag">4.4</span> NGENGETEREZE Annatorie<span class="spouse">+ ...</span></span>
-                  <ul>
-                    <li><span class="node wife2"><span class="tag">5.1</span> Jean Marie</span></li>
-                    <li><span class="node wife2"><span class="tag">5.2</span> Alexia</span></li>
-                    <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
-                  </ul>
-                </li>
+              <!-- ===== WIFE 2's LINE (BAGEGUZA) ===== -->
+              <li><span class="node wife2"><span class="tag">Gen 3 · Umugore 2</span> BARITATIRA + BAGEGUZA</span>
+                <ul>
 
-                <li><span class="node wife2"><span class="tag">4.5</span> BUCIZANA<span class="spouse">+ ...</span></span>
-                  <ul>
-                    <li><span class="node wife2"><span class="tag">5.1</span> BINONGORI</span></li>
-                    <li><span class="node wife2"><span class="tag">5.2</span> Judith</span></li>
-                    <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
-                    <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
-                  </ul>
-                </li>
+                  <li><span class="node wife2"><span class="tag">4.1</span> NTUNGUMBURANYE Michel<span class="spouse">+ NIYAKIRE Madereine</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> HAKIZIMANA Régine<span class="spouse">+ ...</span></span>
+                        <ul>
+                            <li><span class="node wife2"><span class="tag">6.1</span> Murwaneza Santana</span></li>
+                            <li><span class="node wife2"><span class="tag">6.2</span> Remesha Ketina</span></li>
+                            <li><span class="node wife2"><span class="tag">6.3</span> Nishimwe Danette</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> NGENZEBUHORO J.Marie<span class="spouse">+ 1.Ndayisenga Ange-Odette, 2.Digne marie kaneza, 3.Esperance Mudoro</span></span> <!-- Ndayisenga Ange-Odette (Digne marie kaneza), Esperance Mudoro-->
+                        <ul>
+                          <li><span class="node wife2"><span class="tag">6.1.1</span> Mugabo Nobel<span class="spouse">+ Michou Milady Musanase</span></span>
+                            <ul>
+                              <li><span class="node wife2"><span class="tag">7.1</span> Rema Mugabo 👑</span></li>
+                            </ul>
+                          </li>
+                          <li><span class="node wife2"><span class="tag">6.2.1</span> Muco Nana</span></li>
+                          <li><span class="node wife2"><span class="tag">6.3.2</span> Iteriteka Thibaut</span></li>
+                          <li><span class="node wife2"><span class="tag">6.4.2</span> Gateka Desty</span></li>
+                          <li><span class="node wife2"><span class="tag">6.5.3</span> Iteka Ella</span></li>
+                          <li><span class="node wife2"><span class="tag">6.6.3</span> Teta Edna</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.3</span> UWIMANA Marie<span class="spouse">+ </span></span>
+                        <ul>
+                            <li><span class="node wife2"><span class="tag">6.1</span> Harerimana Didier Donald</span></li>
+                            <li><span class="node wife2"><span class="tag">6.2</span> Harerimana Diella</span></li>
+                            <li><span class="node wife2"><span class="tag">6.3</span> Cubahiro Danny Robin</span></li>
+                            <li><span class="node wife2"><span class="tag">6.4</span> Mucowimana Vaniella</span></li>
+                        </ul>   
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.4</span> HAJAYANDI Gérard<span class="spouse">+ Habimana Evelyne</span></span>
+                        <ul>
+                          <li><span class="node wife2"><span class="tag">6.1</span> Iradukunda Gloria</span></li>
+                          <li><span class="node wife2"><span class="tag">6.2</span> Ntungumburanye Guy Michell <span class="spouse">(deceased, age 1)</span></span></li>
+                          <li><span class="node wife2"><span class="tag">6.3</span> Muhoza Pilote 👑</span></li>
+                          <li><span class="node wife2"><span class="tag">6.4</span> Mugisha Khalid</span></li>
+                          <li><span class="node wife2"><span class="tag">6.5</span> Mutabazi Tonny</span></li>
+                          <li><span class="node wife2"><span class="tag">6.6</span> Mizero Blessing</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.5</span> NTUNGUMBURANYE Zacharie</span></li>
+                      <li><span class="node wife2"><span class="tag">5.6</span> NTUNGUMBURANYE Dieudonné <span class="spouse">+   </span></span>
+                        <ul>
+                          <li><span class="node wife2"><span class="tag">6.1</span> Ntungumburanye Billy Maxime</span></li>
+                          <li><span class="node wife2"><span class="tag">6.2</span> Ntungumburanye Prince</span></li>
+                          <li><span class="node unknown"><span class="tag">6.2</span> ?</span></li>
+                          </ul>
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.7</span> IRIBAGIZA Mireille</span></li>
+                    </ul>
+                  </li>
 
-                <li><span class="node wife2"><span class="tag">4.6</span> SINDAYIGANZA Joseph<span class="spouse">+ NDAYENGENGE Buphémie</span></span>
-                  <ul>
-                    <li><span class="node wife2"><span class="tag">5.1</span> BIZIMANA Nicodème</span></li>
-                    <li><span class="node wife2"><span class="tag">5.2</span> NDERAGAKURA Alexie (Binwa)</span></li>
-                    <li><span class="node wife2"><span class="tag">5.3</span> KABERA ...</span></li>
-                    <li><span class="node wife2"><span class="tag">5.4</span> GAKOBWA Bernadette ...</span></li>
-                    <li><span class="node wife2"><span class="tag">5.5</span> Adèle</span></li>
-                    <li><span class="node wife2"><span class="tag">5.6</span> Béatrice</span></li>
-                    <li><span class="node wife2"><span class="tag">5.7</span> NDIKUMANA Francine</span></li>
-                    <li><span class="node wife2"><span class="tag">5.8</span> HABONIMANA Médiatrice</span></li>
-                  </ul>
-                </li>
+                  <li><span class="node wife2"><span class="tag">4.2</span> BIDAGAZA Gervais<span class="spouse">+ NTIBAHEZWA</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> MUNEZERO Judith</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> GAKIZA Gaspard<span class="spouse">+ </span></span>
+                      <ul>
+                          <li><span class="node wife2"><span class="tag">6.1 Gakiza Venuste</span> </span></li>
+                          <li><span class="node wife2"><span class="tag">6.2 Iranezereza Clairia</span> </span></li>
+                          <li><span class="node wife2"><span class="tag">6.3 Bidagaza Cherubin </span> </span></li>
+                          <li><span class="node wife2"><span class="tag">6.4 Gakiza Chérissa</span> </span></li>
+                          <li><span class="node unknown"><span class="tag">6.5 </span> ?</span></li>
+                      </ul>
+                      
+                      </li>
+                      <li><span class="node wife2"><span class="tag">5.3</span> KAKUNZE Aline</span></li>
+                      <li><span class="node wife2"><span class="tag">5.4</span> BUKEYENEZA Charles</span></li>
+                      <li><span class="node wife2"><span class="tag">5.5</span> INABAKOBWA Jeacqueline</span></li>
+                      <li><span class="node wife2"><span class="tag">5.6</span> BIDAGAZA J. Paul</span></li>
+                      <li><span class="node wife2"><span class="tag">5.7</span> MUHIMPUNDU Adelaide</span></li>
+                      <li><span class="node wife2"><span class="tag">5.8</span> BARITATIRA Nöel</span></li>
+                      <li><span class="node wife2"><span class="tag">5.9</span> BIDAGAZA Jeanne</span></li>
+                    </ul>
+                  </li>
 
-                <li><span class="node wife2"><span class="tag">4.7</span> BUSHURI Emmanuel<span class="spouse">+ MUHIMBARE Marcelline</span></span>
-                  <ul>
-                    <li><span class="node wife2"><span class="tag">5.1</span> KAGABO Shabani</span></li>
-                    <li><span class="node wife2"><span class="tag">5.2</span> Belise</span></li>
-                    <li><span class="node wife2"><span class="tag">5.3</span> RUBARIRWA Léonard</span></li>
-                    <li><span class="node wife2"><span class="tag">5.4</span> AHISHAKIYE Pierre</span></li>
-                    <li><span class="node wife2"><span class="tag">5.5</span> HABONIMANA Doline</span></li>
-                    <li><span class="node wife2"><span class="tag">5.6</span> Yvone</span></li>
-                    <li><span class="node wife2"><span class="tag">5.7</span> KANYAMUNEZA Odile</span></li>
-                  </ul>
-                </li>
+                  <li><span class="node wife2"><span class="tag">4.3</span> KAGWEWE<span class="spouse">+ ...</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> Ladégonde</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> Spès</span></li>
+                      <li><span class="node wife2"><span class="tag">5.3</span> Judith</span></li>
+                    </ul>
+                  </li>
 
-              </ul>
-            </li>
+                  <li><span class="node wife2"><span class="tag">4.4</span> NGENGETEREZE Annatorie<span class="spouse">+ ...</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> Jean Marie</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> Alexia</span></li>
+                      <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                    </ul>
+                  </li>
 
-          </ul>
+                  <li><span class="node wife2"><span class="tag">4.5</span> BUCIZANA<span class="spouse">+ ...</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> BINONGORI</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> Judith</span></li>
+                      <li><span class="node unknown"><span class="tag">5.3</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.4</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.5</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.6</span> ?</span></li>
+                      <li><span class="node unknown"><span class="tag">5.7</span> ?</span></li>
+                    </ul>
+                  </li>
+
+                  <li><span class="node wife2"><span class="tag">4.6</span> SINDAYIGANZA Joseph<span class="spouse">+ NDAYENGENGE Buphémie</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> BIZIMANA Nicodème</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> NDERAGAKURA Alexie (Binwa)</span></li>
+                      <li><span class="node wife2"><span class="tag">5.3</span> KABERA ...</span></li>
+                      <li><span class="node wife2"><span class="tag">5.4</span> GAKOBWA Bernadette ...</span></li>
+                      <li><span class="node wife2"><span class="tag">5.5</span> Adèle</span></li>
+                      <li><span class="node wife2"><span class="tag">5.6</span> Béatrice</span></li>
+                      <li><span class="node wife2"><span class="tag">5.7</span> NDIKUMANA Francine</span></li>
+                      <li><span class="node wife2"><span class="tag">5.8</span> HABONIMANA Médiatrice</span></li>
+                    </ul>
+                  </li>
+
+                  <li><span class="node wife2"><span class="tag">4.7</span> BUSHURI Emmanuel<span class="spouse">+ MUHIMBARE Marcelline</span></span>
+                    <ul>
+                      <li><span class="node wife2"><span class="tag">5.1</span> KAGABO Shabani</span></li>
+                      <li><span class="node wife2"><span class="tag">5.2</span> Belise</span></li>
+                      <li><span class="node wife2"><span class="tag">5.3</span> RUBARIRWA Léonard</span></li>
+                      <li><span class="node wife2"><span class="tag">5.4</span> AHISHAKIYE Pierre</span></li>
+                      <li><span class="node wife2"><span class="tag">5.5</span> HABONIMANA Doline</span></li>
+                      <li><span class="node wife2"><span class="tag">5.6</span> Yvone</span></li>
+                      <li><span class="node wife2"><span class="tag">5.7</span> KANYAMUNEZA Odile</span></li>
+                    </ul>
+                  </li>
+
+                </ul>
+              </li>
+
+            </ul>
+          </li></ul>
         </li></ul>
-      </li></ul>
-    </li>
-  </ul>
-</div>
+      </li>
+    </ul>
+  </div>
+  </div>
 
 <script>
 (function () {
