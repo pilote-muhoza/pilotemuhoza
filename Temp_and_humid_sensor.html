@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Live DHT11 Temperature &amp; Humidity Monitor — Muhoza's Public Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .site-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .site-title a:hover {
+            color: #0066cc;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        article {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .post-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .epigraph {
+            font-style: italic;
+            color: #555;
+            border-left: 4px solid #0066cc;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.05rem;
+        }
+
+        .epigraph-author {
+            margin-top: 0.5rem;
+            text-align: right;
+            font-size: 0.95rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #0066cc;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .post-content h4 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        .post-content ul, .post-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.75rem;
+            color: #444;
+        }
+
+        .post-content em {
+            font-style: italic;
+        }
+
+        .post-content strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .post-content a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem 1.5rem 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+        }
+
+        .toc ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+
+        th {
+            background: #f0f4f8;
+            color: #1a1a1a;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid #d0d8e0;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #e8edf2;
+            color: #444;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fafbfc;
+        }
+
+        /* Code blocks */
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1.25rem 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        p code, li code {
+            background: #f0f0f0;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.92em;
+            color: #c0392b;
+        }
+
+        /* Info/warning boxes */
+        .note-box {
+            background: #e3f2fd;
+            border: 2px solid #42a5f5;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .warning-box {
+            background: #fff8e1;
+            border: 2px solid #ffa726;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .tip-box {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            color: #444;
+        }
+
+        .box-icon {
+            font-size: 1.1rem;
+            margin-right: 0.4rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 1.75rem;
+            position: relative;
+            margin-bottom: 0.6rem;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #888;
+            font-size: 1rem;
+        }
+
+        /* Steps */
+        .step-block {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .step-block h4 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+
+        /* Results box */
+        .results-box {
+            background: #fce4ec;
+            border: 2px solid #ec407a;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        /* Resources table */
+        .resources-table td:first-child {
+            font-weight: 500;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+
+        /* Image placeholders */
+        .image-placeholder {
+            border: 2px dashed #b0bcc9;
+            border-radius: 8px;
+            background: #f4f6f8;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: #888;
+            margin: 1.5rem 0;
+        }
+
+        .image-placeholder .placeholder-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .image-placeholder .placeholder-label {
+            font-weight: 600;
+            color: #556;
+            margin-bottom: 0.35rem;
+        }
+
+        .image-placeholder .placeholder-hint {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #888;
+            margin-top: 4rem;
+        }
+
+        .comments-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .comments-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .comments-intro {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            article {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .comments-section {
+                padding: 2rem 1.5rem;
+            }
+
+            pre {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-title">
+                <a href="index.html">Muhoza's Public Journal</a>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="back-link">← Back to all posts</a>
+
+        <article>
+            <div class="post-header">
+                <h1>Building a Live DHT11 Temperature &amp; Humidity Monitor</h1>
+                <div class="subtitle">A step-by-step walkthrough of wiring a DHT11 sensor to a Raspberry Pi and building a real-time dark-mode dashboard with Python and Matplotlib</div>
+                <div class="meta">Pilote Muhoza · 2026</div>
+            </div>
+
+            <div class="post-content">
+
+                <div class="epigraph">
+                    "Measure what is measurable, and make measurable what is not so."
+                    <div class="epigraph-author">— attributed to Galileo Galilei</div>
+                </div>
+
+                <div class="toc">
+                    <div class="toc-title">Table of Contents</div>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#components">Components Used</a></li>
+                        <li><a href="#wiring">Wiring the Sensor</a></li>
+                        <li><a href="#setup">Software Setup</a></li>
+                        <li><a href="#reading">Reading the Sensor</a></li>
+                        <li><a href="#dashboard">Building the Live Dashboard</a></li>
+                        <li><a href="#controls">Interactive Controls</a></li>
+                        <li><a href="#results">Results &amp; UI</a></li>
+                        <li><a href="#source">Source Code</a></li>
+                    </ul>
+                </div>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    This guide documents how I built a live-updating temperature and humidity dashboard using a DHT11 sensor and a Raspberry Pi. The sensor is polled continuously, readings are aggregated per-second and kept in rolling buffers, and a dark-mode Matplotlib dashboard plots temperature and humidity in real time — with radio-button controls to switch between millisecond/second resolution and different time spans (30 seconds up to 24 hours).
+                </p>
+
+                <h2 id="components">Components Used</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Model</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🧠 Board</td>
+                                <td>Raspberry Pi</td>
+                                <td>Runs the Python data collection &amp; plotting script</td>
+                            </tr>
+                            <tr>
+                                <td>🌡️ Sensor</td>
+                                <td>DHT11</td>
+                                <td>Digital temperature &amp; humidity sensor</td>
+                            </tr>
+                            <tr>
+                                <td>🔌 GPIO Pin</td>
+                                <td>GPIO 22</td>
+                                <td>Data line for the DHT11</td>
+                            </tr>
+                            <tr>
+                                <td>🐍 Libraries</td>
+                                <td>adafruit_dht, matplotlib, numpy</td>
+                                <td>Sensor driver + live plotting</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="wiring">Wiring the Sensor</h2>
+
+                <div class="step-block">
+                    <h4>Step 1 — Connect the DHT11 to the Pi</h4>
+                    <ol>
+                        <li>Connect the DHT11 <strong>VCC</strong> pin to a <strong>3.3V</strong> or <strong>5V</strong> pin on the Pi (check your specific module's rating).</li>
+                        <li>Connect <strong>GND</strong> to any ground pin.</li>
+                        <li>Connect the <strong>data pin</strong> to <strong>GPIO 22</strong> (or another free GPIO — just update the pin in the script).</li>
+                        <li>If your module doesn't have a built-in pull-up resistor, add a <strong>10kΩ resistor</strong> between the data line and VCC.</li>
+                    </ol>
+                </div>
+
+                <div class="warning-box">
+                    <span class="box-icon">⚠️</span><strong>Double-check polarity</strong> before powering on — reversing VCC and GND is a common way to damage the sensor.
+                </div>
+
+                <div class="image-placeholder">
+                    <span class="placeholder-icon">📷</span>
+                    <div class="placeholder-label">Hardware setup photo</div>
+                    <img src="images/sensor_setup.jpg" alt="DHT11 wired to Raspberry Pi"&gt;>
+                </div>
+
+                <h2 id="setup">Software Setup</h2>
+
+                <p>Install the required Python packages on the Pi:</p>
+
+                <pre><code>pip3 install adafruit-circuitpython-dht matplotlib numpy</code></pre>
+
+                <div class="tip-box">
+                    <span class="box-icon">💡</span>On some Pi models you may also need <code>sudo apt install libgpiod2</code> for the DHT library to access GPIO correctly.
+                </div>
+
+                <h3>Initializing the Sensor</h3>
+                <p>The script starts by importing the libraries it needs and creating the sensor object on the chosen GPIO pin:</p>
+
+                <pre><code>import adafruit_dht
+import board
+
+sensor = adafruit_dht.DHT11(board.D22)</code></pre>
+
+                <h2 id="reading">Reading the Sensor</h2>
+
+                <p>
+                    Two sets of rolling buffers (Python <code>deque</code>s) store the incoming readings: one capped at 60,000 entries for high-frequency sampling, and one capped at 86,400 entries (24 hours' worth of one-per-second readings) for the longer view.
+                </p>
+
+                <div class="step-block">
+                    <h4>Step 2 — Poll the sensor in a loop</h4>
+                    <p style="margin-bottom: 0;">
+                        Inside the main loop, the script reads <code>sensor.temperature</code> and <code>sensor.humidity</code>, appends them to the millisecond buffers, and accumulates values so that once a full second has elapsed it can store an averaged second-level reading too. DHT11 reads occasionally throw a <code>RuntimeError</code> (a normal quirk of the sensor) — the script simply catches it and tries again on the next loop.
+                    </p>
+                </div>
+
+                <pre><code>temperature = sensor.temperature
+humidity = sensor.humidity
+
+if temperature is not None and humidity is not None:
+    timestamps_ms.append(current_time)
+    temperatures_ms.append(temperature)
+    humidities_ms.append(humidity)</code></pre>
+
+                <h2 id="dashboard">Building the Live Dashboard</h2>
+
+                <p>
+                    The dashboard uses Matplotlib's <code>dark_background</code> style with a custom coral-red / turquoise palette for temperature and humidity. Two stacked subplots share the same time axis, each with a filled area under the curve and a live-updating stats box showing the current, average, minimum, and maximum values.
+                </p>
+
+                <div class="step-block">
+                    <h4>Step 3 — Set up the figure and axes</h4>
+                    <ol>
+                        <li>Create the figure with <code>plt.ion()</code> so it updates interactively without blocking the script.</li>
+                        <li>Lay out a temperature subplot on top and a humidity subplot below using <code>subplot2grid</code>.</li>
+                        <li>Style both axes: dark background, coloured spines, dashed gridlines, and a legend.</li>
+                    </ol>
+                </div>
+
+                <h3>Redrawing on Every Reading</h3>
+                <p>
+                    The <code>update_plot()</code> function is called after every sensor read. It swaps in the latest data for the active resolution (millisecond or second), re-fills the area under each curve, rescales the x-axis to the selected time span, and auto-scales the y-axis with a bit of padding so the trace never touches the edges.
+                </p>
+
+                <h2 id="controls">Interactive Controls</h2>
+
+                <p>
+                    Two sets of radio buttons sit beside the plots:
+                </p>
+                <ul>
+                    <li><strong>Resolution</strong> — toggle between <em>Per Millisecond</em> (raw readings) and <em>Per Second</em> (averaged readings)</li>
+                    <li><strong>Time Span</strong> — zoom the x-axis to <em>30 sec</em>, <em>1 min</em>, <em>1 hour</em>, or <em>24 hours</em></li>
+                </ul>
+                <p>
+                    Both sets trigger <code>update_plot()</code> on click, so switching views is instant even while new readings keep streaming in.
+                </p>
+
+                <div class="image-placeholder">
+                    <span class="placeholder-icon">🖥️</span>
+                    <div class="placeholder-label">Dashboard UI screenshot</div>
+                    <div class="placeholder-hint">Drop your live dashboard screenshot here, e.g. &lt;img src="images/dht11-dashboard-ui.jpg" alt="Live DHT11 dashboard UI"&gt;</div>
+                </div>
+
+                <h2 id="results">Results &amp; UI</h2>
+
+                <div class="results-box">
+                    <p style="margin-bottom: 0.5rem;"><em>The dashboard title updates live to show the active resolution and time span, e.g. "⚡ MILLISECOND | 30 SECONDS".</em></p>
+                    <p style="margin-bottom: 0;">In testing:</p>
+                </div>
+
+                <ul>
+                    <li><strong>Millisecond mode:</strong> useful for spotting sensor read noise and short spikes</li>
+                    <li><strong>Second mode:</strong> smoother trend lines, better for the 1-hour and 24-hour views</li>
+                    <li><strong>Console log:</strong> every reading is also printed with a timestamp, e.g. <code>⏰ 14:32:07.123 | 🌡️ 22.0°C | 💧 48.0%</code></li>
+                </ul>
+
+                <p>
+                    Pressing <code>Ctrl+C</code> stops data collection and leaves the final plot open (<code>plt.ioff(); plt.show()</code>) so the last state can be reviewed or saved.
+                </p>
+
+                <h2 id="source">Source Code</h2>
+
+                <p style="margin-bottom: 0;">
+                    <!-- Add the link to your source code / repo below -->
+                    Full source code: <a href="#" target="_blank">link to source code coming soon</a>
+                </p>
+
+                <p style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #e0e0e0; font-style: italic; color: #666;">
+                    <strong>Note:</strong> If you have any questions or suggestions for this guide, please leave a comment below or send me a message directly. Found an issue or want to contribute? Feel free to open a PR or raise an issue.
+                </p>
+
+            </div>
+        </article>
+
+        <div class="comments-section">
+            <h2>Comments</h2>
+            <p class="comments-intro">Share your thoughts, questions, or build notes below! Or send me a message directly.</p>
+
+            <script src="https://utteranc.es/client.js"
+                    repo="pilote-muhoza/pilotemuhoza"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Muhoza's Blog. Built by Muhoza Pilote and hosted on GitHub Pages.</p>
+        </div>
+    </footer>
+</body>
+</html>
